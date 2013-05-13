@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <anttasks:AntTask xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:anttasks="http://at.bestsolution.efxclipse.tooling.jdt/1.0" buildDirectory="${workspace}/WordsTrainer/build">
-  <deploy>
+  <deploy embedjnlp="true">
     <application name="WordsTrainer" mainclass="est412.wordstrainer.WordsTrainer" version="0.0.1"/>
     <info vendor="est412"/>
   </deploy>

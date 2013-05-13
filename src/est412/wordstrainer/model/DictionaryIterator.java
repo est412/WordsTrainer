@@ -21,6 +21,9 @@ public class DictionaryIterator {
 	}
 	
 	public String getCurWord() {
+		System.out.println("curLang="+curLang);
+		System.out.println("curWordCnt[curLang]="+curWordCnt[curLang]);
+		System.out.println("wordsIndex[curLang][curWordCnt[curLang]]="+wordsIndex[curLang][curWordCnt[curLang]]);
 		return dict.getWord(wordsIndex[curLang][curWordCnt[curLang]], curLang);
 	}
 	

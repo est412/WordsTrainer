@@ -42,13 +42,17 @@ public class WordsTrainerController {
 	
 	@FXML protected void handleFileButtonAction(ActionEvent event) {
 		FileChooser fileChooser = new FileChooser();
+		File initDir = new File(System.getProperty("user.dir"));
 		 
         //Set extension filter
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XLSX files (*.xlsx)", "*.xlsx");
         fileChooser.getExtensionFilters().add(extFilter);
+        fileChooser.setInitialDirectory(initDir);
+        
        
         //Show open file dialog
         file = fileChooser.showOpenDialog(null);
+        if (file == null) return;
         
         try {
         	dict = new Dictionary(file.getAbsolutePath());
@@ -82,7 +86,7 @@ public class WordsTrainerController {
 	@FXML protected void handleNextButtonAction(ActionEvent event) {
 		String str;
 		if (!isTranslate) {
-			dictIterator.nextWord();
+			dictIterator.nextWord(); //??? решить!!!
 			str = dictIterator.getCurWord();
 			labelLang[dictIterator.getCurLang() == 0 ? 1 : 0].setText("");
 			labelLang[dictIterator.getCurLang()].setText(str);

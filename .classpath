@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre7x64"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.7.0_21x64"/>
 	<classpathentry kind="con" path="at.bestsolution.efxclipse.tooling.jdt.core.JAVAFX_CONTAINER"/>
 	<classpathentry kind="lib" path="D:/_Lib_/Java/poi-3.9/poi-3.9-20121203.jar"/>
 	<classpathentry kind="lib" path="D:/_Lib_/Java/poi-3.9/poi-ooxml-3.9-20121203.jar"/>
 	<classpathentry kind="lib" path="D:/_Lib_/Java/poi-3.9/poi-ooxml-schemas-3.9-20121203.jar"/>
 	<classpathentry kind="lib" path="D:/_Lib_/Java/poi-3.9/ooxml-lib/dom4j-1.6.1.jar"/>
-	<classpathentry kind="lib" path="D:/_Lib_/Java/poi-3.9/ooxml-lib/xmlbeans-2.3.0.jar"></classpathentry>
+	<classpathentry kind="lib" path="D:/_Lib_/Java/poi-3.9/ooxml-lib/xmlbeans-2.3.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

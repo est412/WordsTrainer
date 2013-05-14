@@ -25,8 +25,8 @@ public class WordsTrainerController {
 	@FXML private CheckBox checkboxLang1;
 	@FXML private CheckBox checkboxRndLang;
 	private CheckBox[] checkboxLang = new CheckBox[2]; 
-	@FXML private Label labelCurWordCount;
-	@FXML private Label labelDictWordsNum;
+	@FXML private Label labelWordsIdxCnt;
+	@FXML private Label labelWordsIdxTotal;
 	@FXML private Button buttonNext;
 	@FXML private Button buttonRestart;
 	@FXML private HBox hboxLang;
@@ -69,8 +69,8 @@ public class WordsTrainerController {
         buttonNext.disableProperty().setValue(false);
         buttonRestart.disableProperty().setValue(true);
         hboxLang.setDisable(false);
-        labelDictWordsNum.setText(new Integer(dict.getWordsNum()).toString());
-        labelCurWordCount.setText("<Слово>");
+        labelWordsIdxTotal.setText(new Integer(dict.getWordsNum()).toString());
+        labelWordsIdxCnt.setText("<Слово>");
         changeSystemState();		
 	}
 	
@@ -80,7 +80,7 @@ public class WordsTrainerController {
 		buttonNext.disableProperty().setValue(false);
 		labelLang0.setText("<Иностранный>");
 		labelLang1.setText("<Русский>");
-		labelCurWordCount.setText("<Слово>");
+		labelWordsIdxCnt.setText("<Слово>");
 	}
 		
 	@FXML protected void handleNextButtonAction(ActionEvent event) {
@@ -99,7 +99,7 @@ public class WordsTrainerController {
 			hboxLang.setDisable(false);
 		}
 		buttonRestart.disableProperty().setValue(false);
-		labelCurWordCount.setText(new Integer(dictIterator.getCurWordCnt()+1).toString());
+		labelWordsIdxCnt.setText(new Integer(dictIterator.getWordsIdxCnt()).toString());
 		isTranslate = !isTranslate;
 	}
 	
@@ -137,11 +137,11 @@ public class WordsTrainerController {
 		}
 		if (!checkboxLang0.isSelected()) {
 			buttonNext.disableProperty().setValue(dictIterator.setActiveLangs(1));
-			checkboxRndLang.setDisable(true);
 		}
 		if (!checkboxLang1.isSelected()) {
 			buttonNext.disableProperty().setValue(dictIterator.setActiveLangs(0));
-			checkboxRndLang.setDisable(true);
 		}
+		labelWordsIdxTotal.setText(new Integer(dictIterator.getWordsIdxTotal()).toString());
+		labelWordsIdxCnt.setText(new Integer(dictIterator.getWordsIdxCnt()).toString());
 	}
 }

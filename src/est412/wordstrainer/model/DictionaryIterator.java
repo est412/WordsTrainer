@@ -37,7 +37,7 @@ public class DictionaryIterator {
 	}
 	
 	public boolean nextWord(int lang) {
-		return (isLastWord(++curWordCnt[lang]));
+		return isLastWord(++curWordCnt[lang]);
 	}
 	
 	public boolean isLastWord() {
@@ -70,12 +70,27 @@ public class DictionaryIterator {
 			do {
 				curLang = (int) (Math.random() * 2); 
 			} while (isLastWord(curLang));
-		else curLang = (curLang == 0 ? 1 : 0);
+		else {
+			System.out.println("до"+curLang+" : "+curWordCnt[curLang]);
+			curLang = (curLang == 0 ? 1 : 0);
+			if (isLastWord(curLang)) curLang = (curLang == 0 ? 1 : 0);
+			System.out.println("после"+curLang+" : "+curWordCnt[curLang]);
+		}
 		return isLastWord();
 	}
 	
 	public void setRndLang(boolean rndLang) {
 		this.rndLang = rndLang;
+	}
+	
+	public int getWordsIdxTotal() {
+		if (activeLangs == -1) return wordsNum*2; 
+		else return wordsNum;
+	}
+	
+	public int getWordsIdxCnt() {
+		if (activeLangs == -1) return (curWordCnt[0]+1) + (curWordCnt[1]+1); 
+		else return curWordCnt[curLang]+1;
 	}
 	
 	public void randomize() {

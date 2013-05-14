@@ -51,7 +51,7 @@ public class WordsTrainerController {
         
        
         //Show open file dialog
-        file = fileChooser.showOpenDialog(null);
+        file = fileChooser.showOpenDialog(WordsTrainer.mainStage);
         if (file == null) return;
         
         try {
@@ -86,7 +86,7 @@ public class WordsTrainerController {
 	@FXML protected void handleNextButtonAction(ActionEvent event) {
 		String str;
 		if (!isTranslate) {
-			dictIterator.nextWord(); //??? решить!!!
+			dictIterator.nextWord();
 			str = dictIterator.getCurWord();
 			labelLang[dictIterator.getCurLang() == 0 ? 1 : 0].setText("");
 			labelLang[dictIterator.getCurLang()].setText(str);

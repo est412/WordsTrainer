@@ -21,9 +21,6 @@ public class DictionaryIterator {
 	}
 	
 	public String getCurWord() {
-		System.out.println("curLang="+curLang);
-		System.out.println("curWordCnt[curLang]="+curWordCnt[curLang]);
-		System.out.println("wordsIndex[curLang][curWordCnt[curLang]]="+wordsIndex[curLang][curWordCnt[curLang]]);
 		return dict.getWord(wordsIndex[curLang][curWordCnt[curLang]], curLang);
 	}
 	
@@ -69,7 +66,10 @@ public class DictionaryIterator {
 	}
 	
 	public boolean switchCurLang() {
-		if (rndLang) curLang = (int) (Math.random() * 2); 
+		if (rndLang) 
+			do {
+				curLang = (int) (Math.random() * 2); 
+			} while (isLastWord(curLang));
 		else curLang = (curLang == 0 ? 1 : 0);
 		return isLastWord();
 	}

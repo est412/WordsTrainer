@@ -34,6 +34,6 @@ public class Dictionary {
 	}
 	
 	public String getWord(int count, int lang) {
-		return sheet.getRow(count).getCell(lang).getStringCellValue();
+		return sheet.getRow(count).getCell(lang).toString();
 	}
 }

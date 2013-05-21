@@ -20,7 +20,8 @@ public class WordsTrainerController {
 	@FXML private Label labelLang0;
 	@FXML private Label labelLang1;
 	@FXML private Label labelFile;
-	private Label[] labelLang = new Label[2]; 
+	private Label[] labelLang = new Label[2];
+	@FXML private CheckBox checkboxRepeat;
 	@FXML private CheckBox checkboxLang0;
 	@FXML private CheckBox checkboxLang1;
 	@FXML private CheckBox checkboxRndLang;
@@ -73,6 +74,7 @@ public class WordsTrainerController {
         hboxLang.setDisable(false);
         labelWordsIdxTotal.setText(new Integer(dict.getWordsNum()).toString());
         labelWordsIdxCnt.setText("<Слово>");
+        checkboxRepeat.disableProperty().setValue(true);
         changeSystemState();		
 	}
 	
@@ -95,6 +97,9 @@ public class WordsTrainerController {
 			labelLang[dictIterator.getCurLang()].setText(str);
 			hboxLang.setDisable(true);
 			buttonRepeat.disableProperty().setValue(true);
+			checkboxRepeat.disableProperty().setValue(false);
+			checkboxRepeat.selectedProperty()
+				.setValue(dict.isToRepeat(dictIterator.getCurWordCnt(), dictIterator.getCurLang()));
 		}
 		else {
 			str = dictIterator.translateCurWord();
@@ -114,11 +119,15 @@ public class WordsTrainerController {
 		changeSystemState();
 	}
 	
+	@FXML protected void handleRepeatCheckBoxAction(ActionEvent event) {
+		dict.setToRepeat(checkboxRepeat.isSelected(), dictIterator.getCurWordCnt(), dictIterator.getCurLang());
+	}
+		
 	@FXML protected void handleLang1CheckBoxAction(ActionEvent event) {
 		if (!checkboxLang0.isSelected() && !checkboxLang1.isSelected()) 
 			checkboxLang0.setSelected(true);
 		changeSystemState();
-		}
+	}
 	
 	@FXML protected void handleRndLangCheckBoxAction(ActionEvent event) {
 		dictIterator.setRndLang(checkboxRndLang.isSelected());

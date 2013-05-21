@@ -7,10 +7,15 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="319.0" prefWidth="317.0" xmlns:fx="http://javafx.com/fxml" fx:controller="est412.wordstrainer.WordsTrainerController">
+<AnchorPane prefHeight="319.0" prefWidth="441.0" xmlns:fx="http://javafx.com/fxml" fx:controller="est412.wordstrainer.WordsTrainerController">
   <!-- TODO Add Nodes -->
   <children>
-    <HBox id="HBox" fx:id="hboxLang" alignment="CENTER" disable="true" fillHeight="true" spacing="20.0" visible="true" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
+    <HBox prefHeight="16.0" prefWidth="84.0" AnchorPane.bottomAnchor="289.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0">
+      <children>
+        <CheckBox fx:id="checkboxRepeat" disable="true" mnemonicParsing="false" onAction="#handleRepeatCheckBoxAction" text="Повторить" />
+      </children>
+    </HBox>
+    <HBox id="HBox" fx:id="hboxLang" alignment="CENTER" disable="true" fillHeight="true" spacing="20.0" visible="true" AnchorPane.bottomAnchor="289.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
       <children>
         <CheckBox fx:id="checkboxLang0" mnemonicParsing="false" onAction="#handleLang0CheckBoxAction" selected="true" text="Иностранный" textAlignment="LEFT" />
         <CheckBox fx:id="checkboxLang1" mnemonicParsing="false" onAction="#handleLang1CheckBoxAction" text="Русский" />
@@ -50,7 +55,7 @@
         <Button fx:id="buttonNext" disable="true" mnemonicParsing="false" onAction="#handleNextButtonAction" prefWidth="57.0" text="Next" />
       </children>
     </HBox>
-    <Label fx:id="labelFile" layoutX="14.0" layoutY="252.0" text="&lt;Файл&gt;" />
+    <Label id="" fx:id="labelFile" layoutX="14.0" layoutY="252.0" text="&lt;Файл&gt;" textOverrun="CENTER_ELLIPSIS" />
     <Button layoutX="14.0" layoutY="288.0" mnemonicParsing="false" onAction="#handleFileButtonAction" text="Файл" />
   </children>
 </AnchorPane>

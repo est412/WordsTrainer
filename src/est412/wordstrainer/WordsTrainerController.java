@@ -27,6 +27,7 @@ public class WordsTrainerController {
 	private CheckBox[] checkboxLang = new CheckBox[2]; 
 	@FXML private Label labelWordsIdxCnt;
 	@FXML private Label labelWordsIdxTotal;
+	@FXML private Button buttonRepeat;
 	@FXML private Button buttonNext;
 	@FXML private Button buttonRestart;
 	@FXML private HBox hboxLang;
@@ -36,8 +37,8 @@ public class WordsTrainerController {
 	private boolean isTranslate;
 	private File file;
 	
-	@FXML protected void handleStartButtonAction(ActionEvent event) {
-
+	@FXML protected void handleRepeatButtonAction(ActionEvent event) {
+		dictIterator.addToRepeat();
 	}
 	
 	@FXML protected void handleFileButtonAction(ActionEvent event) {
@@ -66,6 +67,7 @@ public class WordsTrainerController {
         labelFile.setText(file.getAbsolutePath());
         isTranslate = false;
         dictIterator = new DictionaryIterator(dict);
+        buttonRepeat.disableProperty().setValue(true);
         buttonNext.disableProperty().setValue(false);
         buttonRestart.disableProperty().setValue(true);
         hboxLang.setDisable(false);
@@ -81,6 +83,7 @@ public class WordsTrainerController {
 		labelLang0.setText("<Иностранный>");
 		labelLang1.setText("<Русский>");
 		labelWordsIdxCnt.setText("<Слово>");
+		buttonRepeat.disableProperty().setValue(true);
 	}
 		
 	@FXML protected void handleNextButtonAction(ActionEvent event) {
@@ -91,12 +94,14 @@ public class WordsTrainerController {
 			labelLang[dictIterator.getCurLang() == 0 ? 1 : 0].setText("");
 			labelLang[dictIterator.getCurLang()].setText(str);
 			hboxLang.setDisable(true);
+			buttonRepeat.disableProperty().setValue(true);
 		}
 		else {
 			str = dictIterator.translateCurWord();
 			labelLang[dictIterator.getCurLang() == 0 ? 1 : 0].setText(str);
 			buttonNext.disableProperty().setValue(dictIterator.isLastWord());
 			hboxLang.setDisable(false);
+			buttonRepeat.disableProperty().setValue(false);
 		}
 		buttonRestart.disableProperty().setValue(false);
 		labelWordsIdxCnt.setText(new Integer(dictIterator.getWordsIdxCnt()).toString());

@@ -45,6 +45,7 @@
     <Separator prefWidth="315.0" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="2.0" />
     <HBox id="HBox" alignment="CENTER" minHeight="16.0001220703125" prefHeight="16.0001220703125" spacing="10.0" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
       <children>
+        <Button fx:id="buttonRepeat" disable="false" mnemonicParsing="false" onAction="#handleRepeatButtonAction" text="Repeat" />
         <Button fx:id="buttonRestart" disable="true" mnemonicParsing="false" onAction="#handleRestartButtonAction" text="Restart" />
         <Button fx:id="buttonNext" disable="true" mnemonicParsing="false" onAction="#handleNextButtonAction" prefWidth="57.0" text="Next" />
       </children>

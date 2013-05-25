@@ -17,7 +17,7 @@
     </HBox>
     <HBox id="HBox" fx:id="hboxLang" alignment="CENTER" disable="true" fillHeight="true" spacing="20.0" visible="true" AnchorPane.bottomAnchor="289.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
       <children>
-        <CheckBox fx:id="checkboxLang0" mnemonicParsing="false" onAction="#handleLang0CheckBoxAction" selected="false" text="Иностранный" textAlignment="LEFT" />
+        <CheckBox fx:id="checkboxLang0" mnemonicParsing="false" onAction="#handleLang0CheckBoxAction" selected="true" text="Иностранный" textAlignment="LEFT" />
         <CheckBox fx:id="checkboxLang1" mnemonicParsing="false" onAction="#handleLang1CheckBoxAction" text="Русский" />
         <CheckBox fx:id="checkboxRndLang" mnemonicParsing="false" onAction="#handleRndLangCheckBoxAction" text="Случайно" />
       </children>

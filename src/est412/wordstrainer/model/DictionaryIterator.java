@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -16,15 +18,17 @@ public class DictionaryIterator {
 	private int wordsNum;
 	private int curLang; // 0 = foreing, 1 = russian
 	private int activeLangs; // -1 = both; 0 = foreing, 1 = russian
-	private boolean rndLang = false;
+	//private boolean rndLang = false;
 	
 	private List<ObservableList<Integer>> wordsIndex = new ArrayList<ObservableList<Integer>>();
 	
 	private int curWord;
 	public BooleanProperty[] isEmptyIndex = new SimpleBooleanProperty[2];
-	public BooleanProperty isLast;
-	
+	public BooleanProperty isRndLang = new SimpleBooleanProperty(false);
 	public StringProperty[] word = new SimpleStringProperty[2];
+	public IntegerProperty wordsIdxTotal = new SimpleIntegerProperty();
+	public IntegerProperty wordsIdxCnt = new SimpleIntegerProperty();
+	
 	
 	public DictionaryIterator(Dictionary dict) {
 		this.dict = dict;
@@ -36,24 +40,29 @@ public class DictionaryIterator {
 		initIndex();
 	}
 	
-	// to delete?
-	public int getCurWordCnt() {
-		return curWord;
+	public void clearWord() {
+		word[0].set("");
+		word[1].set("");
 	}
 	
-	public String getCurWord() {
-		curWord = (int) (Math.random() * wordsIndex.get(0).size());
+	private void nextLang() {
+		if (activeLangs == -1) switchCurLang();
+		else setCurLang(activeLangs);
+	}
+	
+	public void nextWord() {
+		clearWord();
+		nextLang();
+		curWord = (int) (Math.random() * wordsIndex.get(curLang).size());
 		String str = dict.getWord(curLang, curWord);
 		word[curLang].setValue(str);
-		return str;
 	}
 	
-	public String translateCurWord() {
+	public void translateCurWord() {
 		int lang = (curLang == 0 ? 1 : 0);
-		wordsIndex.get(curLang).remove(curWord);
 		String str = dict.getWord(lang, curWord);
 		word[lang].setValue(str);
-		return str;
+		wordsIndex.get(curLang).remove(curWord);
 	}
 	
 	// to delete? or convert to Property
@@ -69,7 +78,7 @@ public class DictionaryIterator {
 	
 	public boolean setActiveLangs(int langs) {
 		activeLangs = langs;
-		System.out.println("DictionaryIterator.setActiveLangs() "+activeLangs);
+		//System.out.println("DictionaryIterator.setActiveLangs() "+activeLangs);
 		if (langs == -1) return (isLastWord(0) && isLastWord(1));
 		else return isLastWord(langs);
 	}
@@ -84,7 +93,7 @@ public class DictionaryIterator {
 	}
 	
 	public boolean switchCurLang() {
-		if (rndLang) 
+		if (isRndLang.get()) 
 			do {
 				curLang = (int) (Math.random() * 2); 
 			} while (isLastWord(curLang));
@@ -95,19 +104,16 @@ public class DictionaryIterator {
 		return isLastWord();
 	}
 	
-	public void setRndLang(boolean rndLang) {
-		this.rndLang = rndLang;
+	private void calcWordsIdxTotal() {
+		if (activeLangs == -1) wordsIdxTotal.setValue(wordsNum*2); 
+		else wordsIdxTotal.setValue(wordsNum);
 	}
 	
-	public int getWordsIdxTotal() {
-		if (activeLangs == -1) return wordsNum*2; 
-		else return wordsNum;
-	}
-	
-	public int getWordsIdxCnt() {
-		if (activeLangs == -1) 
-			return getWordsIdxTotal() - wordsIndex.get(0).size() - wordsIndex.get(1).size();
-		else return getWordsIdxTotal() - wordsIndex.get(curLang).size();
+	private void calcWordsIdxCnt() {
+		int cnt;
+		if (activeLangs == -1) cnt = wordsNum*2 - wordsIndex.get(0).size() - wordsIndex.get(1).size();  
+		else cnt = wordsNum - wordsIndex.get(curLang).size();
+		wordsIdxCnt.setValue(cnt);
 	}
 	
 	public void addToRepeat() {
@@ -116,27 +122,30 @@ public class DictionaryIterator {
 	
 	
 	public void initIndex() {
-		//System.out.println("initIndex");
+		wordsIndex.clear();
 		ObservableList<Integer> tmp = FXCollections.observableArrayList();
 		wordsIndex.add(tmp);
 		tmp = FXCollections.observableArrayList();
 		wordsIndex.add(tmp);
+		wordsIndex.get(0).addListener(new ListChangeListener<Integer>() {
+	    	@Override
+	    	public void onChanged(ListChangeListener.Change change) {
+	    		isEmptyIndex[0].set(wordsIndex.get(0).isEmpty());
+	    		calcWordsIdxTotal();
+	    		calcWordsIdxCnt();
+	    	} // onChanged()
+	    }); // addListener(
+	    wordsIndex.get(1).addListener(new ListChangeListener<Integer>() {
+	    	@Override
+	    	public void onChanged(ListChangeListener.Change change) {
+	    		isEmptyIndex[1].set(wordsIndex.get(1).isEmpty());
+	    		calcWordsIdxTotal();
+	    		calcWordsIdxCnt();
+	    	} // onChanged()
+	    }); // addListener(
 		for (int i = 0; i < dict.getWordsNumber(); i++) {
 			wordsIndex.get(0).add(new Integer(i));
 			wordsIndex.get(1).add(new Integer(i));
 		} // for
-	    //System.out.println("1" + isEmptyIndex[0] + " " + isEmptyIndex[1]);
-		wordsIndex.get(0).addListener(new ListChangeListener() {
-	    	@Override
-	    	public void onChanged(ListChangeListener.Change change) {
-	    		isEmptyIndex[0].set(wordsIndex.get(0).isEmpty());
-	    	} // onChanged()
-	    }); // addListener(
-	    wordsIndex.get(1).addListener(new ListChangeListener() {
-	    	@Override
-	    	public void onChanged(ListChangeListener.Change change) {
-	    		isEmptyIndex[1].set(wordsIndex.get(1).isEmpty());
-	    	} // onChanged()
-	    }); // addListener(
 	} // initIndex()
 } // class

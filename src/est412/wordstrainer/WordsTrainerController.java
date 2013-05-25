@@ -11,9 +11,8 @@ import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.WindowEvent;
 
-import org.apache.poi.openxml4j.opc.OPCPackage;
-
 import est412.wordstrainer.model.Dictionary;
+import est412.wordstrainer.model.XLSXDictionary;
 import est412.wordstrainer.model.DictionaryIterator;
 
 public class WordsTrainerController {
@@ -38,6 +37,10 @@ public class WordsTrainerController {
 	private boolean isTranslate;
 	private File file;
 	
+	public WordsTrainerController() {
+		//System.out.println("конструктор");
+	}
+	
 	@FXML protected void handleRepeatButtonAction(ActionEvent event) {
 		dictIterator.addToRepeat();
 	}
@@ -57,7 +60,7 @@ public class WordsTrainerController {
         if (file == null) return;
         
         try {
-        	dict = new Dictionary(file.getAbsolutePath());
+        	dict = new XLSXDictionary(file.getAbsolutePath());
         } catch (Exception e) {
         	e.printStackTrace();
         }
@@ -72,15 +75,20 @@ public class WordsTrainerController {
         buttonNext.disableProperty().setValue(false);
         buttonRestart.disableProperty().setValue(true);
         hboxLang.setDisable(false);
-        labelWordsIdxTotal.setText(new Integer(dict.getWordsNum()).toString());
+        labelWordsIdxTotal.setText(new Integer(dict.getWordsNumber()).toString());
         labelWordsIdxCnt.setText("<Слово>");
         checkboxRepeat.disableProperty().setValue(true);
-        changeSystemState();		
+        changeSystemState();
+        System.out.println(checkboxLang0 + " " + checkboxLang1 + " " + dictIterator.isLastWord[0] + " " + dictIterator.isLastWord[1]);
+		checkboxLang0.disableProperty().bind(dictIterator.isLastWord[0]);
+		checkboxLang1.disableProperty().bind(dictIterator.isLastWord[1]);
+
 	}
 	
 	@FXML protected void handleRestartButtonAction(ActionEvent event) {
 		isTranslate = false;
-		dictIterator.randomize();
+		//dictIterator.randomize();
+		dictIterator.initIndex();
 		buttonNext.disableProperty().setValue(false);
 		labelLang0.setText("<Иностранный>");
 		labelLang1.setText("<Русский>");
@@ -91,7 +99,7 @@ public class WordsTrainerController {
 	@FXML protected void handleNextButtonAction(ActionEvent event) {
 		String str;
 		if (!isTranslate) {
-			dictIterator.nextWord();
+			//dictIterator.nextWord();
 			str = dictIterator.getCurWord();
 			labelLang[dictIterator.getCurLang() == 0 ? 1 : 0].setText("");
 			labelLang[dictIterator.getCurLang()].setText(str);
@@ -99,7 +107,7 @@ public class WordsTrainerController {
 			buttonRepeat.disableProperty().setValue(true);
 			checkboxRepeat.disableProperty().setValue(false);
 			checkboxRepeat.selectedProperty()
-				.setValue(dict.isToRepeat(dictIterator.getCurWordCnt(), dictIterator.getCurLang()));
+				.setValue(dict.isToRepeat(dictIterator.getCurLang(), dictIterator.getCurWordCnt()));
 		}
 		else {
 			str = dictIterator.translateCurWord();
@@ -120,7 +128,7 @@ public class WordsTrainerController {
 	}
 	
 	@FXML protected void handleRepeatCheckBoxAction(ActionEvent event) {
-		dict.setToRepeat(checkboxRepeat.isSelected(), dictIterator.getCurWordCnt(), dictIterator.getCurLang());
+		dict.setToRepeat(dictIterator.getCurLang(), dictIterator.getCurWordCnt(), checkboxRepeat.isSelected());
 	}
 		
 	@FXML protected void handleLang1CheckBoxAction(ActionEvent event) {
@@ -136,8 +144,8 @@ public class WordsTrainerController {
 	static protected void handleStageCloseRequest(WindowEvent we) {
 		try { 
 			if (dict != null) {
-				OPCPackage pkg = dict.getPkg();
-				if (pkg != null) pkg.close();
+				dict.save();
+				dict.close();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

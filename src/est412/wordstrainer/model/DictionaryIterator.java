@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -18,13 +21,18 @@ public class DictionaryIterator {
 	private List<ObservableList<Integer>> wordsIndex = new ArrayList<ObservableList<Integer>>();
 	
 	private int curWord;
-	public BooleanProperty[] isLastWord = new BooleanProperty[2]; // как создать проперти?!
+	public BooleanProperty[] isEmptyIndex = new SimpleBooleanProperty[2];
 	public BooleanProperty isLast;
+	
+	public StringProperty[] word = new SimpleStringProperty[2];
 	
 	public DictionaryIterator(Dictionary dict) {
 		this.dict = dict;
 		wordsNum = dict.getWordsNumber();
-		//isLastWord[0] = new BooleanProperty
+		isEmptyIndex[0] = new SimpleBooleanProperty();
+		isEmptyIndex[1] = new SimpleBooleanProperty();
+		word[0] = new SimpleStringProperty();
+		word[1] = new SimpleStringProperty();
 		initIndex();
 	}
 	
@@ -35,13 +43,17 @@ public class DictionaryIterator {
 	
 	public String getCurWord() {
 		curWord = (int) (Math.random() * wordsIndex.get(0).size());
-		return dict.getWord(curLang, curWord);
+		String str = dict.getWord(curLang, curWord);
+		word[curLang].setValue(str);
+		return str;
 	}
 	
 	public String translateCurWord() {
 		int lang = (curLang == 0 ? 1 : 0);
 		wordsIndex.get(curLang).remove(curWord);
-		return dict.getWord(lang, curWord);
+		String str = dict.getWord(lang, curWord);
+		word[lang].setValue(str);
+		return str;
 	}
 	
 	// to delete? or convert to Property
@@ -57,6 +69,7 @@ public class DictionaryIterator {
 	
 	public boolean setActiveLangs(int langs) {
 		activeLangs = langs;
+		System.out.println("DictionaryIterator.setActiveLangs() "+activeLangs);
 		if (langs == -1) return (isLastWord(0) && isLastWord(1));
 		else return isLastWord(langs);
 	}
@@ -103,7 +116,7 @@ public class DictionaryIterator {
 	
 	
 	public void initIndex() {
-		System.out.println("initIndex");
+		//System.out.println("initIndex");
 		ObservableList<Integer> tmp = FXCollections.observableArrayList();
 		wordsIndex.add(tmp);
 		tmp = FXCollections.observableArrayList();
@@ -112,17 +125,17 @@ public class DictionaryIterator {
 			wordsIndex.get(0).add(new Integer(i));
 			wordsIndex.get(1).add(new Integer(i));
 		} // for
-	    System.out.println("1" + isLastWord[0] + " " + isLastWord[1]);
+	    //System.out.println("1" + isEmptyIndex[0] + " " + isEmptyIndex[1]);
 		wordsIndex.get(0).addListener(new ListChangeListener() {
 	    	@Override
 	    	public void onChanged(ListChangeListener.Change change) {
-	    		isLastWord[0].set(wordsIndex.get(0).isEmpty());
+	    		isEmptyIndex[0].set(wordsIndex.get(0).isEmpty());
 	    	} // onChanged()
 	    }); // addListener(
 	    wordsIndex.get(1).addListener(new ListChangeListener() {
 	    	@Override
 	    	public void onChanged(ListChangeListener.Change change) {
-	    		isLastWord[1].set(wordsIndex.get(1).isEmpty());
+	    		isEmptyIndex[1].set(wordsIndex.get(1).isEmpty());
 	    	} // onChanged()
 	    }); // addListener(
 	} // initIndex()

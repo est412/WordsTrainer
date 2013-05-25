@@ -78,10 +78,11 @@ public class WordsTrainerController {
         labelWordsIdxTotal.setText(new Integer(dict.getWordsNumber()).toString());
         labelWordsIdxCnt.setText("<Слово>");
         checkboxRepeat.disableProperty().setValue(true);
-        changeSystemState();
-        System.out.println(checkboxLang0 + " " + checkboxLang1 + " " + dictIterator.isLastWord[0] + " " + dictIterator.isLastWord[1]);
-		checkboxLang0.disableProperty().bind(dictIterator.isLastWord[0]);
-		checkboxLang1.disableProperty().bind(dictIterator.isLastWord[1]);
+        //changeSystemState();
+        setBindings();
+        //System.out.println(checkboxLang0 + " " + checkboxLang1 + " " + dictIterator.isLastWord[0] + " " + dictIterator.isLastWord[1]);
+		//checkboxLang0.disableProperty().bind(dictIterator.isLastWord[0]);
+		//checkboxLang1.disableProperty().bind(dictIterator.isLastWord[1]);
 
 	}
 	
@@ -98,27 +99,29 @@ public class WordsTrainerController {
 		
 	@FXML protected void handleNextButtonAction(ActionEvent event) {
 		String str;
+		System.out.println("handleNextButtonAction "+isTranslate);
 		if (!isTranslate) {
 			//dictIterator.nextWord();
 			str = dictIterator.getCurWord();
 			labelLang[dictIterator.getCurLang() == 0 ? 1 : 0].setText("");
-			labelLang[dictIterator.getCurLang()].setText(str);
+			//labelLang[dictIterator.getCurLang()].setText(str);
 			hboxLang.setDisable(true);
 			buttonRepeat.disableProperty().setValue(true);
 			checkboxRepeat.disableProperty().setValue(false);
 			checkboxRepeat.selectedProperty()
 				.setValue(dict.isToRepeat(dictIterator.getCurLang(), dictIterator.getCurWordCnt()));
+			isTranslate = true;
 		}
 		else {
 			str = dictIterator.translateCurWord();
-			labelLang[dictIterator.getCurLang() == 0 ? 1 : 0].setText(str);
+			//labelLang[dictIterator.getCurLang() == 0 ? 1 : 0].setText(str);
 			buttonNext.disableProperty().setValue(dictIterator.isLastWord());
 			hboxLang.setDisable(false);
 			buttonRepeat.disableProperty().setValue(false);
+			isTranslate = false;
 		}
 		buttonRestart.disableProperty().setValue(false);
 		labelWordsIdxCnt.setText(new Integer(dictIterator.getWordsIdxCnt()).toString());
-		isTranslate = !isTranslate;
 	}
 	
 	@FXML protected void handleLang0CheckBoxAction(ActionEvent event) {
@@ -152,7 +155,7 @@ public class WordsTrainerController {
 		}
 	}
 	
-	protected void changeSystemState() {
+	private void changeSystemState() {
 		if (checkboxLang0.isSelected() && checkboxLang1.isSelected()) {
 			buttonNext.disableProperty().setValue(dictIterator.setActiveLangs(-1));
 			checkboxRndLang.setDisable(false);
@@ -165,5 +168,14 @@ public class WordsTrainerController {
 		}
 		labelWordsIdxTotal.setText(new Integer(dictIterator.getWordsIdxTotal()).toString());
 		labelWordsIdxCnt.setText(new Integer(dictIterator.getWordsIdxCnt()).toString());
+	}
+	
+	private void setBindings() {
+		//System.out.println("set bind");
+		checkboxLang0.disableProperty().bind(dictIterator.isEmptyIndex[0]);
+		checkboxLang1.disableProperty().bind(dictIterator.isEmptyIndex[1]);
+		labelLang0.textProperty().bindBidirectional(dictIterator.word[0]);
+		labelLang1.textProperty().bindBidirectional(dictIterator.word[1]);
+		
 	}
 }

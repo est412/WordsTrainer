@@ -42,9 +42,11 @@
     </SplitPane>
     <HBox id="HBox" alignment="CENTER" spacing="5.0" AnchorPane.bottomAnchor="51.0" AnchorPane.rightAnchor="14.0">
       <children>
-        <Label id="" fx:id="labelWordsIdxCnt" text="&lt;Слово&gt;" />
+        <Label id="labelWordsCntLang0" fx:id="labelIdxWordsCntLang0" text="&lt;Ин&gt;" />
+        <Label text="/" />
+        <Label id="" fx:id="labelIdxWordsCntLang1" text="&lt;Рус&gt;" />
         <Label prefWidth="5.0" text="/" />
-        <Label id="" fx:id="labelWordsIdxTotal" text="&lt;Всего&gt;" />
+        <Label id="" fx:id="labelIdxWordsNumber" text="&lt;Всего&gt;" />
       </children>
     </HBox>
     <Separator prefWidth="315.0" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="2.0" />

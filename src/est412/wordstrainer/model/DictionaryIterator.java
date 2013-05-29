@@ -135,13 +135,15 @@ public class DictionaryIterator {
 		clearCurWord();
 		nextLang();
 		curWordPos = (int) (Math.random() * wordsIndex.get(curLang).size());
-		String str = dict.getWord(curLang, curWordPos);
+		//System.out.print("N "+curLang+" "+wordsIndex.get(curLang).size()+" "+curWordPos+" ");
+		String str = dict.getWord(curLang, wordsIndex.get(curLang).get(curWordPos));
 		setCurWord(curLang, str);
 	}
 	
 	public void translateCurWord() {
 		int lang = (curLang == 0 ? 1 : 0);
-		String str = dict.getWord(lang, curWordPos);
+		//System.out.print("T "+curLang+" "+wordsIndex.get(curLang).size()+" "+curWordPos+" ");
+		String str = dict.getWord(lang, wordsIndex.get(curLang).get(curWordPos));
 		setCurWord(lang, str);
 		wordsIndex.get(curLang).remove(curWordPos);
 	}

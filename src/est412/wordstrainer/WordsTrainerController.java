@@ -93,11 +93,13 @@ public class WordsTrainerController {
 			dictIterator.nextWord();
 			hboxLang.setDisable(true);
 			isTranslate = true;
+			//System.out.print(dictIterator.curWordProperty(0).get()+" - ");
 		}
 		else {
 			dictIterator.translateCurWord();
 			hboxLang.setDisable(false);
 			isTranslate = false;
+			//System.out.println(dictIterator.curWordProperty(1).get());
 		}
 		buttonRestart.disableProperty().setValue(false);
 		//System.out.println(isCheckBoxRndDisable.get());

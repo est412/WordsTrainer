@@ -5,6 +5,7 @@ import java.util.List;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -24,6 +25,7 @@ public class DictionaryIterator {
 	
 	private int curWordPos;
 	private BooleanProperty[] idxEmpty = new SimpleBooleanProperty[2];
+	private BooleanProperty idxEmptyTotal = new SimpleBooleanProperty();
 	private BooleanProperty langRnd = new SimpleBooleanProperty(false);
 	private StringProperty[] curWord = new SimpleStringProperty[2];
 	private IntegerProperty idxWordsNumber = new SimpleIntegerProperty();
@@ -44,6 +46,21 @@ public class DictionaryIterator {
 	public boolean isLangRnd() {
 		return langRnd.get();
 	}
+	
+	/*
+	public boolean isIdxEmptyTotal() {
+		return idxEmpty[0].get() && idxEmpty[1].get();
+	}
+	
+	protected void setIdxEmptyTotal(boolean empty) {
+		idxEmpty[0].set(empty);
+		idxEmpty[1].set(empty);
+	}*/
+
+	public BooleanProperty idxEmptyTotalProperty() {
+		return idxEmptyTotal;
+	}
+	
 	
 	protected void setLangRnd(boolean rnd) {
 		langRnd.set(rnd);
@@ -89,6 +106,8 @@ public class DictionaryIterator {
 		return idxWordsCounter[lang];
 	}
 	
+	
+	
 	public DictionaryIterator(Dictionary dict) {
 		this.dict = dict;
 		idxEmpty[0] = new SimpleBooleanProperty();
@@ -97,6 +116,7 @@ public class DictionaryIterator {
 		curWord[1] = new SimpleStringProperty();
 		idxWordsCounter[0] = new SimpleIntegerProperty();
 		idxWordsCounter[1] = new SimpleIntegerProperty();
+		idxEmptyTotal.bind(Bindings.and(idxEmpty[0], idxEmpty[1]));
 		idxWordsNumber.set(dict.getWordsNumber());
 		initIndex();
 	}

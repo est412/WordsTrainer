@@ -19,7 +19,7 @@
       <children>
         <CheckBox fx:id="checkboxLang0" mnemonicParsing="false" onAction="#handleLang0CheckBoxAction" selected="true" text="Иностранный" textAlignment="LEFT" />
         <CheckBox fx:id="checkboxLang1" mnemonicParsing="false" onAction="#handleLang1CheckBoxAction" text="Русский" />
-        <CheckBox fx:id="checkboxRndLang" mnemonicParsing="false" onAction="#handleRndLangCheckBoxAction" text="Случайно" />
+        <CheckBox fx:id="checkboxRndLang" mnemonicParsing="false" text="Случайно" />
       </children>
     </HBox>
     <SplitPane dividerPositions="0.4926829268292683" focusTraversable="true" orientation="VERTICAL" prefHeight="207.0" prefWidth="317.0" AnchorPane.bottomAnchor="67.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="45.0">

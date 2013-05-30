@@ -19,7 +19,6 @@ public class DictionaryIterator {
 	private Dictionary dict;
 	private int curLang; // 0 = foreing, 1 = russian
 	private int activeLangs; // -1 = both; 0 = foreing, 1 = russian
-	//private boolean rndLang = false;
 	
 	private List<ObservableList<Integer>> wordsIndex = new ArrayList<ObservableList<Integer>>();
 	
@@ -135,56 +134,38 @@ public class DictionaryIterator {
 		clearCurWord();
 		nextLang();
 		curWordPos = (int) (Math.random() * wordsIndex.get(curLang).size());
-		//System.out.print("N "+curLang+" "+wordsIndex.get(curLang).size()+" "+curWordPos+" ");
 		String str = dict.getWord(curLang, wordsIndex.get(curLang).get(curWordPos));
 		setCurWord(curLang, str);
 	}
 	
 	public void translateCurWord() {
 		int lang = (curLang == 0 ? 1 : 0);
-		//System.out.print("T "+curLang+" "+wordsIndex.get(curLang).size()+" "+curWordPos+" ");
 		String str = dict.getWord(lang, wordsIndex.get(curLang).get(curWordPos));
 		setCurWord(lang, str);
 		wordsIndex.get(curLang).remove(curWordPos);
 	}
 	
-	// to delete? or convert to Property
-	public boolean isLastWord() {
-		if (activeLangs == -1) return (isLastWord(0) && isLastWord(1));
-		else return isLastWord(curLang);
-	}
-	
-	// to delete? or convert to Property
-	public boolean isLastWord(int lang) {
-		return wordsIndex.get(lang).isEmpty();
-	}
-	
-	public boolean setActiveLangs(int langs) {
+	public void setActiveLangs(int langs) {
 		activeLangs = langs;
-		//System.out.println("DictionaryIterator.setActiveLangs() "+activeLangs);
-		if (langs == -1) return (isLastWord(0) && isLastWord(1));
-		else return isLastWord(langs);
 	}
 	
-	public boolean setCurLang(int lang) {
+	public void setCurLang(int lang) {
 		curLang = lang;
-		return isLastWord();
 	}
 	
 	public int getCurLang() {
 		return curLang;
 	}
 	
-	public boolean switchCurLang() {
+	public void switchCurLang() {
 		if (isLangRnd()) 
 			do {
 				curLang = (int) (Math.random() * 2); 
-			} while (isLastWord(curLang));
+			} while (isIdxEmpty(curLang));
 		else {
 			curLang = (curLang == 0 ? 1 : 0);
-			if (isLastWord(curLang)) curLang = (curLang == 0 ? 1 : 0);
+			if (isIdxEmpty(curLang)) curLang = (curLang == 0 ? 1 : 0);
 		}
-		return isLastWord();
 	}
 	
 	private void calcIdxWordsCounter() {
@@ -194,7 +175,6 @@ public class DictionaryIterator {
 	}
 	
 	public void addToRepeat() {
-		//wI[curWordsIdx == 0 ? 1 : 0][curLang][repeatWordCnt[curLang]] = curWordCnt[curLang];  
 	};
 	
 	

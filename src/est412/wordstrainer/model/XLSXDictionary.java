@@ -1,9 +1,18 @@
 package est412.wordstrainer.model;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -12,8 +21,13 @@ public class XLSXDictionary implements Dictionary {
 	private int wordsNum;
 	
 	private OPCPackage pkg;
-	private XSSFWorkbook wb;
-	private XSSFSheet sheet;
+	//private XSSFWorkbook wb;
+	private Workbook wb;
+	//private XSSFSheet sheet;
+	private Sheet sheet;
+	private InputStream inStream;
+	private OutputStream outStream;
+	File fil; 
 	
 	public XLSXDictionary(String fileName) throws IOException {
 		open(fileName);
@@ -26,7 +40,12 @@ public class XLSXDictionary implements Dictionary {
 	public void open(String fileName) throws IOException {
 		try {
 			pkg = OPCPackage.open(fileName);
+			fil = new File(fileName+"1");
+			//inStream = new FileInputStream(fileName);
+			//outStream = new FileOutputStream(fileName);
 			wb = new XSSFWorkbook(pkg);
+			//wb = new XSSFWorkbook(inStream);
+			//wb = WorkbookFactory.create(inStream);
 			sheet = wb.getSheetAt(0);
 			wordsNum = sheet.getPhysicalNumberOfRows();
 		} catch (Exception e) {
@@ -40,7 +59,11 @@ public class XLSXDictionary implements Dictionary {
 	 */
 	@Override
 	public void save() throws IOException {
-		
+		try {
+			pkg.save(fil);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/* (non-Javadoc)
@@ -49,6 +72,7 @@ public class XLSXDictionary implements Dictionary {
 	@Override
 	public void close() throws IOException {
 		if (pkg != null) pkg.close();
+		//if (inStream != null) inStream.close();
 	}
 
 	/* (non-Javadoc)
@@ -72,7 +96,8 @@ public class XLSXDictionary implements Dictionary {
 	 */
 	@Override
 	public boolean isToRepeat(int lang, int count) {
-		XSSFCell cell = sheet.getRow(count).getCell(lang+2);
+		//XSSFCell cell = sheet.getRow(count).getCell(lang+2);
+		Cell cell = sheet.getRow(count).getCell(lang+2);
 		if (cell == null) return false;
 		return (cell.getNumericCellValue() == 1);
 	}
@@ -82,13 +107,17 @@ public class XLSXDictionary implements Dictionary {
 	 */
 	@Override
 	public void setToRepeat(int lang, int count, boolean is) {
-		XSSFCell cell = sheet.getRow(count).getCell(lang+2);
+		//XSSFCell cell = sheet.getRow(count).getCell(lang+2);
+		System.out.println("");
+		Cell cell = sheet.getRow(count).getCell(lang+2);
 		if (cell == null) {
 			cell = sheet.getRow(count).createCell(lang+2);
 			cell.setCellType(Cell.CELL_TYPE_NUMERIC);
 		}
+		System.out.println("set "+count+" "+is);
 		cell.setCellValue(is ? 1 : 0);
 		pkg.flush();
+		//		wb.write(outStream);
 		//System.out.println("flushed");
 	}
 }

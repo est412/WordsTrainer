@@ -76,7 +76,7 @@ public class WordsTrainerController {
         buttonNext.disableProperty().setValue(false);
         buttonRestart.disableProperty().setValue(true);
         hboxLang.setDisable(false);
-        checkboxRepeat.disableProperty().setValue(true);
+        //checkboxRepeat.disableProperty().setValue(true);
         changeSystemState();
         setBindings();
 	}
@@ -113,6 +113,7 @@ public class WordsTrainerController {
 	
 	@FXML protected void handleRepeatCheckBoxAction(ActionEvent event) {
 		//dict.setToRepeat(dictIterator.getCurLang(), dictIterator.getCurWordCnt(), checkboxRepeat.isSelected());
+		
 	}
 		
 	@FXML protected void handleLang1CheckBoxAction(ActionEvent event) {
@@ -167,5 +168,8 @@ public class WordsTrainerController {
 		labelIdxWordsCntLang0.textProperty().bind(dictIterator.idxWordsCounterProperty(0).asString());
 		labelIdxWordsCntLang1.textProperty().bind(dictIterator.idxWordsCounterProperty(1).asString());
 		labelIdxWordsNumber.textProperty().bind(dictIterator.idxWordsNumberProperty().asString());
+		
+		System.out.println("111");
+		checkboxRepeat.selectedProperty().bindBidirectional(dictIterator.toRepeat);
 	}
 }

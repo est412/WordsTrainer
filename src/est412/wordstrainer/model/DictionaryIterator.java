@@ -23,12 +23,15 @@ public class DictionaryIterator {
 	private List<ObservableList<Integer>> wordsIndex = new ArrayList<ObservableList<Integer>>();
 	
 	private int curWordPos;
+	private int prevWordPos;
 	private BooleanProperty[] idxEmpty = new SimpleBooleanProperty[2];
 	private BooleanProperty idxEmptyTotal = new SimpleBooleanProperty();
 	private BooleanProperty langRnd = new SimpleBooleanProperty(false);
 	private StringProperty[] curWord = new SimpleStringProperty[2];
 	private IntegerProperty idxWordsNumber = new SimpleIntegerProperty();
-	private IntegerProperty idxWordsCounter[] = new SimpleIntegerProperty[2];
+	private IntegerProperty[] idxWordsCounter = new SimpleIntegerProperty[2];
+	
+	public BooleanProperty toRepeat = new SimpleBooleanProperty();
 	
 	public boolean isIdxEmpty(int lang) {
 		return idxEmpty[lang].get();
@@ -131,10 +134,14 @@ public class DictionaryIterator {
 	}
 	
 	public void nextWord() {
+		if (prevWordPos != -1) {
+			dict.setToRepeat(curLang, prevWordPos, toRepeat.get());
+		}
 		clearCurWord();
 		nextLang();
 		curWordPos = (int) (Math.random() * wordsIndex.get(curLang).size());
 		String str = dict.getWord(curLang, wordsIndex.get(curLang).get(curWordPos));
+		toRepeat.set(dict.isToRepeat(curLang, wordsIndex.get(curLang).get(curWordPos)));
 		setCurWord(curLang, str);
 	}
 	
@@ -142,6 +149,7 @@ public class DictionaryIterator {
 		int lang = (curLang == 0 ? 1 : 0);
 		String str = dict.getWord(lang, wordsIndex.get(curLang).get(curWordPos));
 		setCurWord(lang, str);
+		prevWordPos = wordsIndex.get(curLang).get(curWordPos);
 		wordsIndex.get(curLang).remove(curWordPos);
 	}
 	
@@ -179,6 +187,8 @@ public class DictionaryIterator {
 	
 	
 	public void initIndex() {
+		curWordPos = -1;
+		prevWordPos = -1;
 		wordsIndex.clear();
 		ObservableList<Integer> tmp = FXCollections.observableArrayList();
 		wordsIndex.add(tmp);

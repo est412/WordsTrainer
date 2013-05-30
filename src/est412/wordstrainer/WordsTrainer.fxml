@@ -10,9 +10,9 @@
 <AnchorPane prefHeight="319.0" prefWidth="441.0" xmlns:fx="http://javafx.com/fxml" fx:controller="est412.wordstrainer.WordsTrainerController">
   <!-- TODO Add Nodes -->
   <children>
-    <HBox prefHeight="16.0" prefWidth="84.0" AnchorPane.bottomAnchor="289.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0">
+    <HBox disable="false" prefHeight="16.0" prefWidth="84.0" AnchorPane.bottomAnchor="289.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0">
       <children>
-        <CheckBox fx:id="checkboxRepeat" disable="true" mnemonicParsing="false" onAction="#handleRepeatCheckBoxAction" text="Повторить" />
+        <CheckBox fx:id="checkboxRepeat" disable="false" mnemonicParsing="false" onAction="#handleRepeatCheckBoxAction" text="Повторить" />
       </children>
     </HBox>
     <HBox id="HBox" fx:id="hboxLang" alignment="CENTER" disable="true" fillHeight="true" spacing="20.0" visible="true" AnchorPane.bottomAnchor="289.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">

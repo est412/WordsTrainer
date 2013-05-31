@@ -26,7 +26,7 @@
       <items>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
           <children>
-            <Label id="lblLang0" fx:id="labelLang0" prefHeight="98.0" prefWidth="289.0001220703125" text="&lt;Иностранный&gt;" textAlignment="LEFT" textOverrun="ELLIPSIS" underline="false" wrapText="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="0.0">
+            <Label id="lblLang0" fx:id="labelLang0" prefHeight="98.0" prefWidth="289.0001220703125" text="&lt;Иностранный&gt;" textAlignment="LEFT" textOverrun="ELLIPSIS" underline="false" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="0.0">
               <font>
                 <Font size="18.0" fx:id="x1" />
               </font>
@@ -35,7 +35,7 @@
         </AnchorPane>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
           <children>
-            <Label fx:id="labelLang1" font="$x1" prefHeight="101.0" prefWidth="289.0" text="&lt;Русский&gt;" textAlignment="LEFT" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="13.0" AnchorPane.topAnchor="0.0" />
+            <Label fx:id="labelLang1" font="$x1" prefHeight="101.0" prefWidth="289.0" text="&lt;Русский&gt;" textAlignment="LEFT" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="13.0" AnchorPane.topAnchor="0.0" />
           </children>
         </AnchorPane>
       </items>
@@ -57,7 +57,7 @@
         <Button fx:id="buttonNext" disable="true" mnemonicParsing="false" onAction="#handleNextButtonAction" prefWidth="57.0" text="Next" />
       </children>
     </HBox>
-    <Label id="" fx:id="labelFile" layoutX="14.0" layoutY="252.0" text="&lt;Файл&gt;" textOverrun="CENTER_ELLIPSIS" />
+    <Label id="" fx:id="labelFile" layoutX="14.0" layoutY="252.0" text="&lt;Файл&gt;" textOverrun="CENTER_ELLIPSIS" wrapText="false" />
     <Button layoutX="14.0" layoutY="288.0" mnemonicParsing="false" onAction="#handleFileButtonAction" text="Файл" />
   </children>
 </AnchorPane>

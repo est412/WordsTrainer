@@ -34,6 +34,8 @@ public class WordsTrainerController {
 	@FXML private Button buttonNext;
 	@FXML private Button buttonRestart;
 	@FXML private HBox hboxLang;
+	@FXML private Label labelLang0Example;
+	@FXML private Label labelLang1Example;
 	
 	static private Dictionary dict;
 	private DictionaryIterator dictIterator;
@@ -164,6 +166,9 @@ public class WordsTrainerController {
 		
 		labelLang0.textProperty().bind(dictIterator.curWordProperty(0));
 		labelLang1.textProperty().bind(dictIterator.curWordProperty(1));
+		
+		labelLang0Example.textProperty().bind(dictIterator.curExampleProperty(0));
+		labelLang1Example.textProperty().bind(dictIterator.curExampleProperty(1));
 		
 		labelIdxWordsCntLang0.textProperty().bind(dictIterator.idxWordsCounterProperty(0).asString());
 		labelIdxWordsCntLang1.textProperty().bind(dictIterator.idxWordsCounterProperty(1).asString());

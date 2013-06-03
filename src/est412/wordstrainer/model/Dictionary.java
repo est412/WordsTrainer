@@ -17,5 +17,7 @@ public interface Dictionary {
 	public abstract boolean isToRepeat(int lang, int count);
 
 	public abstract void setToRepeat(int lang, int count, boolean is);
+	
+	public abstract String getExample(int lang, int count);
 
 }

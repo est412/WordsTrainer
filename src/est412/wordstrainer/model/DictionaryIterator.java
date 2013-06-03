@@ -28,6 +28,7 @@ public class DictionaryIterator {
 	private BooleanProperty idxEmptyTotal = new SimpleBooleanProperty();
 	private BooleanProperty langRnd = new SimpleBooleanProperty(false);
 	private StringProperty[] curWord = new SimpleStringProperty[2];
+	private StringProperty[] curExample = new SimpleStringProperty[2];
 	private IntegerProperty idxWordsNumber = new SimpleIntegerProperty();
 	private IntegerProperty[] idxWordsCounter = new SimpleIntegerProperty[2];
 	
@@ -84,6 +85,18 @@ public class DictionaryIterator {
 		return curWord[lang];
 	}
 	
+	public String getCurExample(int lang) {
+		return curExample[lang].get();
+	}
+	
+	protected void setCurExample(int lang, String word) {
+		curExample[lang].set(word);
+	}
+	
+	public StringProperty curExampleProperty(int lang) {
+		return curExample[lang];
+	}
+	
 	public int getIdxWordsNumber() {
 		return idxWordsNumber.get();
 	}
@@ -116,6 +129,8 @@ public class DictionaryIterator {
 		idxEmpty[1] = new SimpleBooleanProperty();
 		curWord[0] = new SimpleStringProperty();
 		curWord[1] = new SimpleStringProperty();
+		curExample[0] = new SimpleStringProperty();
+		curExample[1] = new SimpleStringProperty();
 		idxWordsCounter[0] = new SimpleIntegerProperty();
 		idxWordsCounter[1] = new SimpleIntegerProperty();
 		idxEmptyTotal.bind(Bindings.and(idxEmpty[0], idxEmpty[1]));
@@ -126,6 +141,8 @@ public class DictionaryIterator {
 	public void clearCurWord() {
 		setCurWord(0, "");
 		setCurWord(1, "");
+		setCurExample(0, "");
+		setCurExample(1, "");
 	}
 	
 	private void nextLang() {
@@ -141,14 +158,18 @@ public class DictionaryIterator {
 		nextLang();
 		curWordPos = (int) (Math.random() * wordsIndex.get(curLang).size());
 		String str = dict.getWord(curLang, wordsIndex.get(curLang).get(curWordPos));
+		String str1 = dict.getExample(curLang, wordsIndex.get(curLang).get(curWordPos));
 		toRepeat.set(dict.isToRepeat(curLang, wordsIndex.get(curLang).get(curWordPos)));
 		setCurWord(curLang, str);
+		setCurExample(curLang, str1);
 	}
 	
 	public void translateCurWord() {
 		int lang = (curLang == 0 ? 1 : 0);
 		String str = dict.getWord(lang, wordsIndex.get(curLang).get(curWordPos));
+		String str1 = dict.getExample(lang, wordsIndex.get(curLang).get(curWordPos));
 		setCurWord(lang, str);
+		setCurExample(lang, str1);
 		prevWordPos = wordsIndex.get(curLang).get(curWordPos);
 		wordsIndex.get(curLang).remove(curWordPos);
 	}

@@ -97,7 +97,7 @@ public class XLSXDictionary implements Dictionary {
 	@Override
 	public boolean isToRepeat(int lang, int count) {
 		//XSSFCell cell = sheet.getRow(count).getCell(lang+2);
-		Cell cell = sheet.getRow(count).getCell(lang+2);
+		Cell cell = sheet.getRow(count).getCell(lang+4);
 		if (cell == null) return false;
 		return (cell.getNumericCellValue() == 1);
 	}
@@ -109,9 +109,9 @@ public class XLSXDictionary implements Dictionary {
 	public void setToRepeat(int lang, int count, boolean is) {
 		//XSSFCell cell = sheet.getRow(count).getCell(lang+2);
 		System.out.println("");
-		Cell cell = sheet.getRow(count).getCell(lang+2);
+		Cell cell = sheet.getRow(count).getCell(lang+4);
 		if (cell == null) {
-			cell = sheet.getRow(count).createCell(lang+2);
+			cell = sheet.getRow(count).createCell(lang+4);
 			cell.setCellType(Cell.CELL_TYPE_NUMERIC);
 		}
 		System.out.println("set "+count+" "+is);
@@ -119,5 +119,10 @@ public class XLSXDictionary implements Dictionary {
 		pkg.flush();
 		//		wb.write(outStream);
 		//System.out.println("flushed");
+	}
+	
+	public String getExample(int lang, int count) {
+		Cell cell = sheet.getRow(count).getCell(lang+2);
+		return (cell == null) ? "" : cell.toString();
 	}
 }

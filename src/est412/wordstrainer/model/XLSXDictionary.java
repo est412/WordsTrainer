@@ -122,7 +122,17 @@ public class XLSXDictionary implements Dictionary {
 	}
 	
 	public String getExample(int lang, int count) {
-		Cell cell = sheet.getRow(count).getCell(lang+2);
-		return (cell == null) ? "" : cell.toString();
+		Cell cell = sheet.getRow(count).getCell(2);
+		if (cell == null) return "";
+		String str = cell.toString();
+		String str1[] = str.split("\n");
+		String str2[];
+		str = "";
+		for (int i = 0; i < str1.length; i++ ) {
+			str2 = str1[i].split(" — ");
+			str = str + str2[lang] + "\n";
+			//System.out.println(str);
+		}
+		return str;
 	}
 }

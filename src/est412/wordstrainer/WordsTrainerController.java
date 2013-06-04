@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.WindowEvent;
@@ -18,10 +19,10 @@ import est412.wordstrainer.model.XLSXDictionary;
 import est412.wordstrainer.model.DictionaryIterator;
 
 public class WordsTrainerController {
-	@FXML private Label labelLang0;
-	@FXML private Label labelLang1;
+	@FXML private TextArea textareaLang0;
+	@FXML private TextArea textareaLang1;
 	@FXML private Label labelFile;
-	private Label[] labelLang = new Label[2];
+	private TextArea[] textareaLang = new TextArea[2];
 	@FXML private CheckBox checkboxRepeat;
 	@FXML private CheckBox checkboxLang0;
 	@FXML private CheckBox checkboxLang1;
@@ -34,8 +35,8 @@ public class WordsTrainerController {
 	@FXML private Button buttonNext;
 	@FXML private Button buttonRestart;
 	@FXML private HBox hboxLang;
-	@FXML private Label labelLang0Example;
-	@FXML private Label labelLang1Example;
+	@FXML private TextArea textareaLang0Example;
+	@FXML private TextArea textareaLang1Example;
 	
 	static private Dictionary dict;
 	private DictionaryIterator dictIterator;
@@ -67,8 +68,8 @@ public class WordsTrainerController {
         } catch (Exception e) {
         	e.printStackTrace();
         }
-        labelLang[0] = labelLang0;
-        labelLang[1] = labelLang1;
+        textareaLang[0] = textareaLang0;
+        textareaLang[1] = textareaLang1;
         checkboxLang[0] = checkboxLang0;
         checkboxLang[1] = checkboxLang1;
         labelFile.setText(file.getAbsolutePath());
@@ -164,11 +165,11 @@ public class WordsTrainerController {
 		
 		dictIterator.langRndProperty().bind(checkboxRndLang.selectedProperty());
 		
-		labelLang0.textProperty().bind(dictIterator.curWordProperty(0));
-		labelLang1.textProperty().bind(dictIterator.curWordProperty(1));
+		textareaLang0.textProperty().bind(dictIterator.curWordProperty(0));
+		textareaLang1.textProperty().bind(dictIterator.curWordProperty(1));
 		
-		labelLang0Example.textProperty().bind(dictIterator.curExampleProperty(0));
-		labelLang1Example.textProperty().bind(dictIterator.curExampleProperty(1));
+		textareaLang0Example.textProperty().bind(dictIterator.curExampleProperty(0));
+		textareaLang1Example.textProperty().bind(dictIterator.curExampleProperty(1));
 		
 		labelIdxWordsCntLang0.textProperty().bind(dictIterator.idxWordsCounterProperty(0).asString());
 		labelIdxWordsCntLang1.textProperty().bind(dictIterator.idxWordsCounterProperty(1).asString());

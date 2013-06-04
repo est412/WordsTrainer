@@ -10,9 +10,10 @@
 <AnchorPane prefHeight="499.0" prefWidth="573.0" xmlns:fx="http://javafx.com/fxml" fx:controller="est412.wordstrainer.WordsTrainerController">
   <!-- TODO Add Nodes -->
   <children>
-    <HBox disable="false" prefHeight="21.0" prefWidth="84.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0">
+    <HBox disable="false" prefHeight="21.0" prefWidth="191.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0">
       <children>
         <CheckBox fx:id="checkboxRepeat" disable="false" mnemonicParsing="false" onAction="#handleRepeatCheckBoxAction" prefHeight="21.0" prefWidth="84.0" text="Повторить" />
+        <CheckBox fx:id="checkboxExample" alignment="CENTER" mnemonicParsing="false" prefHeight="21.0" prefWidth="84.0" text="Примеры" />
       </children>
     </HBox>
     <HBox id="HBox" fx:id="hboxLang" alignment="CENTER" disable="true" fillHeight="true" prefHeight="21.0" spacing="20.0" visible="true" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
@@ -27,13 +28,13 @@
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
           <children>
             <TextArea id="labelLang0" fx:id="textareaLang0" editable="false" focusTraversable="false" minHeight="-Infinity" prefHeight="76.0" prefWidth="571.0" style="-fx-font-size: 18pt;" text="&lt;Иностранный&gt;" wrapText="true" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-            <TextArea id="labelLang0Example" fx:id="textareaLang0Example" editable="false" focusTraversable="false" prefHeight="112.99990000000253" prefWidth="571.0" style="-fx-font-size: 14pt;&#10;-fx-font-style: italic" text="&lt;Пример&gt;" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="76.0" />
+            <TextArea id="labelLang0Example" fx:id="textareaLang0Example" editable="false" focusTraversable="false" prefHeight="112.99990000000253" prefWidth="571.0" style="-fx-font-size: 16pt;&#10;-fx-font-style: italic" text="&lt;Пример&gt;" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="76.0" />
           </children>
         </AnchorPane>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
           <children>
             <TextArea fx:id="textareaLang1" focusTraversable="false" minHeight="-Infinity" prefHeight="76.0" prefWidth="571.0" style="-fx-font-size: 18pt;" text="&lt;Русский&gt;" wrapText="true" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-            <TextArea fx:id="textareaLang1Example" focusTraversable="false" prefHeight="113.0" prefWidth="571.0" style="-fx-font-size: 14pt;&#10;-fx-font-style: italic" text="&lt;Пример&gt;" wrapText="true" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="76.0" />
+            <TextArea fx:id="textareaLang1Example" focusTraversable="false" prefHeight="113.0" prefWidth="571.0" style="-fx-font-size: 16pt;&#10;-fx-font-style: italic" text="&lt;Пример&gt;" wrapText="true" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="76.0" />
           </children>
         </AnchorPane>
       </items>

@@ -24,6 +24,7 @@ public class WordsTrainerController {
 	@FXML private Label labelFile;
 	private TextArea[] textareaLang = new TextArea[2];
 	@FXML private CheckBox checkboxRepeat;
+	@FXML private CheckBox checkboxExample;
 	@FXML private CheckBox checkboxLang0;
 	@FXML private CheckBox checkboxLang1;
 	@FXML private CheckBox checkboxRndLang;
@@ -175,7 +176,9 @@ public class WordsTrainerController {
 		labelIdxWordsCntLang1.textProperty().bind(dictIterator.idxWordsCounterProperty(1).asString());
 		labelIdxWordsNumber.textProperty().bind(dictIterator.idxWordsNumberProperty().asString());
 		
-		System.out.println("111");
+		//System.out.println("111");
 		checkboxRepeat.selectedProperty().bindBidirectional(dictIterator.toRepeat);
+		
+		dictIterator.showExampleProperty().bind(checkboxExample.selectedProperty());
 	}
 }

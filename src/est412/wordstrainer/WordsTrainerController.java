@@ -41,8 +41,8 @@ public class WordsTrainerController {
 	
 	static private Dictionary dict;
 	private DictionaryIterator dictIterator;
-	private boolean isTranslate;
 	private File file;
+	private int toShow;
 	
 	BooleanBinding isCheckBoxRndEnable;
 		
@@ -74,36 +74,45 @@ public class WordsTrainerController {
         checkboxLang[0] = checkboxLang0;
         checkboxLang[1] = checkboxLang1;
         labelFile.setText(file.getAbsolutePath());
-        isTranslate = false;
         dictIterator = new DictionaryIterator(dict);
         buttonRepeat.disableProperty().setValue(true);
+        buttonNext.disableProperty().unbind();
         buttonNext.disableProperty().setValue(false);
         buttonRestart.disableProperty().setValue(true);
         hboxLang.setDisable(false);
         //checkboxRepeat.disableProperty().setValue(true);
         changeSystemState();
         setBindings();
+        toShow = 1;
 	}
 	
 	@FXML protected void handleRestartButtonAction(ActionEvent event) {
-		isTranslate = false;
 		dictIterator.initIndex();
 		dictIterator.clearCurWord();
 		buttonRepeat.disableProperty().setValue(true);
+		toShow = 1;
 	}
 		
 	@FXML protected void handleNextButtonAction(ActionEvent event) {
-		if (!isTranslate) {
+		if (toShow == 1) {
 			dictIterator.nextWord();
 			hboxLang.setDisable(true);
-			isTranslate = true;
-			//System.out.print(dictIterator.curWordProperty(0).get()+" - ");
+			if (checkboxExample.isSelected()) toShow = 2;
+			else toShow = 3;
 		}
-		else {
+		else if (toShow == 2 && checkboxExample.isSelected()) {
+			dictIterator.showExample();
+			toShow = 3;
+		}
+		else if (toShow == 3) {
 			dictIterator.translateCurWord();
 			hboxLang.setDisable(false);
-			isTranslate = false;
-			//System.out.println(dictIterator.curWordProperty(1).get());
+			if (checkboxExample.isSelected()) toShow = 4;
+			else toShow = 1;
+		}
+		else if (toShow == 4 && checkboxExample.isSelected()) {
+			dictIterator.showTrExample();
+			toShow = 1;
 		}
 		buttonRestart.disableProperty().setValue(false);
 		//System.out.println(isCheckBoxRndDisable.get());

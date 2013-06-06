@@ -161,22 +161,31 @@ public class DictionaryIterator {
 		nextLang();
 		curWordPos = (int) (Math.random() * wordsIndex.get(curLang).size());
 		String str = dict.getWord(curLang, wordsIndex.get(curLang).get(curWordPos));
-		String str1 = dict.getExample(curLang, wordsIndex.get(curLang).get(curWordPos));
 		toRepeat.set(dict.isToRepeat(curLang, wordsIndex.get(curLang).get(curWordPos)));
 		setCurWord(curLang, str);
-		if (!showExample.get()) str1 = "";
-		setCurExample(curLang, str1);
 	}
 	
 	public void translateCurWord() {
 		int lang = (curLang == 0 ? 1 : 0);
 		String str = dict.getWord(lang, wordsIndex.get(curLang).get(curWordPos));
-		String str1 = dict.getExample(lang, wordsIndex.get(curLang).get(curWordPos));
 		setCurWord(lang, str);
-		if (!showExample.get()) str1 = "";
-		setCurExample(lang, str1);
 		prevWordPos = wordsIndex.get(curLang).get(curWordPos);
 		wordsIndex.get(curLang).remove(curWordPos);
+	}
+	
+	public void showExample() {
+		String str = dict.getExample(curLang, wordsIndex.get(curLang).get(curWordPos));
+		if (str.equals("")) str = "---";
+		if (!showExample.get()) str = "";
+		setCurExample(curLang, str);
+	}
+	
+	public void showTrExample() {
+		int lang = (curLang == 0 ? 1 : 0);
+		String str = dict.getExample(lang, prevWordPos);
+		if (str.equals("")) str = "---";
+		if (!showExample.get()) str = "";
+		setCurExample(lang, str);
 	}
 	
 	public void setActiveLangs(int langs) {

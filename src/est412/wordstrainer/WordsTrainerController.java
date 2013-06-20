@@ -159,7 +159,7 @@ public class WordsTrainerController {
 	static protected void handleStageCloseRequest(WindowEvent we) {
 		try { 
 			if (dict != null) {
-				dict.save();
+				//dict.save();
 				dict.close();
 			}
 		} catch (Exception e) {

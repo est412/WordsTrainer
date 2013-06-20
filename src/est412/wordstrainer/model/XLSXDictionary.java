@@ -130,7 +130,7 @@ public class XLSXDictionary implements Dictionary {
 		str = "";
 		for (int i = 0; i < str1.length; i++ ) {
 			str2 = str1[i].split(" — ");
-			str = str + str2[lang] + "\n";
+			str = str + (i+1) + ": " + str2[lang] + "\n";
 			//System.out.println(str);
 		}
 		return str;

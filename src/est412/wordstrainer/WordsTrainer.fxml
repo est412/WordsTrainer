@@ -13,7 +13,7 @@
     <HBox disable="false" prefHeight="21.0" prefWidth="191.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0">
       <children>
         <CheckBox fx:id="checkboxRepeat" disable="false" mnemonicParsing="false" onAction="#handleRepeatCheckBoxAction" prefHeight="21.0" prefWidth="84.0" text="Повторить" />
-        <CheckBox fx:id="checkboxExample" alignment="CENTER" mnemonicParsing="false" prefHeight="21.0" prefWidth="84.0" text="Примеры" />
+        <CheckBox fx:id="checkboxExample" alignment="CENTER" mnemonicParsing="false" onAction="#handleExampleCheckBoxAction" prefHeight="21.0" prefWidth="84.0" text="Примеры" />
       </children>
     </HBox>
     <HBox id="HBox" fx:id="hboxLang" alignment="CENTER" disable="true" fillHeight="true" prefHeight="21.0" spacing="20.0" visible="true" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">

@@ -22,8 +22,8 @@ public class DictionaryIterator {
 	
 	private List<ObservableList<Integer>> wordsIndex = new ArrayList<ObservableList<Integer>>();
 	
+	private int curWordIdx;
 	private int curWordPos;
-	private int prevWordPos;
 	private BooleanProperty[] idxEmpty = new SimpleBooleanProperty[2];
 	private BooleanProperty idxEmptyTotal = new SimpleBooleanProperty();
 	private BooleanProperty langRnd = new SimpleBooleanProperty(false);
@@ -32,6 +32,24 @@ public class DictionaryIterator {
 	private IntegerProperty idxWordsNumber = new SimpleIntegerProperty();
 	private IntegerProperty[] idxWordsCounter = new SimpleIntegerProperty[2];
 	private BooleanProperty showExample = new SimpleBooleanProperty();
+	
+	private InvalidationListener invalListener0 = new InvalidationListener() {
+		@Override
+		public void invalidated(Observable observable) {
+    		setIdxEmpty(0, wordsIndex.get(0).isEmpty());
+    		calcIdxWordsCounter();
+		} // invalidated 
+	};
+	
+	private InvalidationListener invalListener1 = new InvalidationListener() {
+		@Override
+		public void invalidated(Observable observable) {
+    		setIdxEmpty(1, wordsIndex.get(1).isEmpty());
+    		calcIdxWordsCounter();
+		} // invalidated 
+	};
+	
+	private String[] buffer = new String[4];
 	
 	public BooleanProperty toRepeat = new SimpleBooleanProperty();
 	
@@ -154,38 +172,39 @@ public class DictionaryIterator {
 	}
 	
 	public void nextWord() {
-		if (prevWordPos != -1) {
-			dict.setToRepeat(curLang, prevWordPos, toRepeat.get());
-		}
 		clearCurWord();
 		nextLang();
-		curWordPos = (int) (Math.random() * wordsIndex.get(curLang).size());
-		String str = dict.getWord(curLang, wordsIndex.get(curLang).get(curWordPos));
-		toRepeat.set(dict.isToRepeat(curLang, wordsIndex.get(curLang).get(curWordPos)));
-		setCurWord(curLang, str);
+		curWordIdx = (int) (Math.random() * wordsIndex.get(curLang).size());
+		curWordPos = wordsIndex.get(curLang).get(curWordIdx);
+		buffer[0] = dict.getWord(0, curWordPos);
+		buffer[1] = dict.getWord(1, curWordPos);
+		buffer[2] = dict.getExample(0, curWordPos);
+		buffer[3] = dict.getExample(1, curWordPos);
+		setCurWord(curLang, buffer[curLang]);
+		wordsIndex.get(curLang).remove(curWordIdx);
 	}
 	
 	public void translateCurWord() {
 		int lang = (curLang == 0 ? 1 : 0);
-		String str = dict.getWord(lang, wordsIndex.get(curLang).get(curWordPos));
-		setCurWord(lang, str);
-		prevWordPos = wordsIndex.get(curLang).get(curWordPos);
-		wordsIndex.get(curLang).remove(curWordPos);
+		setCurWord(lang, buffer[lang]);
 	}
 	
 	public void showExample() {
-		String str = dict.getExample(curLang, wordsIndex.get(curLang).get(curWordPos));
-		if (str.equals("")) str = "---";
-		if (!showExample.get()) str = "";
-		setCurExample(curLang, str);
+		if (buffer[curLang+2].equals("")) buffer[curLang+2] = "---";
+		//if (!showExample.get()) buffer[curLang+2] = ""; // сделать ф-ю hideEx
+		setCurExample(curLang, buffer[curLang+2]);
 	}
 	
 	public void showTrExample() {
 		int lang = (curLang == 0 ? 1 : 0);
-		String str = dict.getExample(lang, prevWordPos);
-		if (str.equals("")) str = "---";
-		if (!showExample.get()) str = "";
-		setCurExample(lang, str);
+		if (buffer[lang+2].equals("")) buffer[lang+2] = "---";
+		//if (!showExample.get()) buffer[lang+2] = ""; // сделать ф-ю hideEx
+		setCurExample(lang, buffer[lang+2]);
+	}
+	
+	public void hideExamples() {
+		setCurExample(0, "");
+		setCurExample(1, "");
 	}
 	
 	public void setActiveLangs(int langs) {
@@ -222,27 +241,14 @@ public class DictionaryIterator {
 	
 	
 	public void initIndex() {
-		curWordPos = -1;
-		prevWordPos = -1;
+		curWordIdx = -1;
 		wordsIndex.clear();
 		ObservableList<Integer> tmp = FXCollections.observableArrayList();
 		wordsIndex.add(tmp);
 		tmp = FXCollections.observableArrayList();
 		wordsIndex.add(tmp);
-		wordsIndex.get(0).addListener(new InvalidationListener() {
-			@Override
-			public void invalidated(Observable observable) {
-	    		setIdxEmpty(0, wordsIndex.get(0).isEmpty());
-	    		calcIdxWordsCounter();
-			} // invalidated
-		}); // wordsIndex.get(0).addListener
-		wordsIndex.get(1).addListener(new InvalidationListener() {
-			@Override
-			public void invalidated(Observable observable) {
-				setIdxEmpty(1, wordsIndex.get(1).isEmpty());
-	    		calcIdxWordsCounter();
-			} // invalidated
-		}); // wordsIndex.get(1).addListener
+		wordsIndex.get(0).addListener(invalListener0);
+		wordsIndex.get(1).addListener(invalListener1);
 		for (int i = 0; i < dict.getWordsNumber(); i++) {
 			wordsIndex.get(0).add(new Integer(i));
 			wordsIndex.get(1).add(new Integer(i));

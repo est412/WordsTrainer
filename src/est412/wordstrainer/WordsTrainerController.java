@@ -43,6 +43,7 @@ public class WordsTrainerController {
 	private DictionaryIterator dictIterator;
 	private File file;
 	private int toShow;
+	private int shown;
 	
 	BooleanBinding isCheckBoxRndEnable;
 		
@@ -84,6 +85,7 @@ public class WordsTrainerController {
         changeSystemState();
         setBindings();
         toShow = 1;
+        shown = -1;
 	}
 	
 	@FXML protected void handleRestartButtonAction(ActionEvent event) {
@@ -91,31 +93,50 @@ public class WordsTrainerController {
 		dictIterator.clearCurWord();
 		buttonRepeat.disableProperty().setValue(true);
 		toShow = 1;
+		shown = -1;
 	}
 		
 	@FXML protected void handleNextButtonAction(ActionEvent event) {
 		if (toShow == 1) {
+			buttonNext.disableProperty().unbind();
 			dictIterator.nextWord();
 			hboxLang.setDisable(true);
+			shown = 1;
 			if (checkboxExample.isSelected()) toShow = 2;
 			else toShow = 3;
 		}
 		else if (toShow == 2 && checkboxExample.isSelected()) {
 			dictIterator.showExample();
 			toShow = 3;
+			shown = 2;
 		}
 		else if (toShow == 3) {
 			dictIterator.translateCurWord();
 			hboxLang.setDisable(false);
 			if (checkboxExample.isSelected()) toShow = 4;
-			else toShow = 1;
+			else { 
+				toShow = 1;
+				changeSystemState();
+			}
+			shown = 3;
 		}
 		else if (toShow == 4 && checkboxExample.isSelected()) {
 			dictIterator.showTrExample();
 			toShow = 1;
+			shown = 4;
+			changeSystemState();
 		}
 		buttonRestart.disableProperty().setValue(false);
 		//System.out.println(isCheckBoxRndDisable.get());
+	}
+	
+	@FXML protected void handleExampleCheckBoxAction(ActionEvent event) {
+		if (!checkboxExample.isSelected()) {
+			dictIterator.hideExamples();
+			return;
+		}
+		if (shown >= 1) dictIterator.showExample();
+		if (shown >= 3) dictIterator.showTrExample();
 	}
 	
 	@FXML protected void handleLang0CheckBoxAction(ActionEvent event) {

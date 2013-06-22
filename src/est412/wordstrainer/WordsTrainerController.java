@@ -15,7 +15,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.WindowEvent;
 
 import est412.wordstrainer.model.Dictionary;
-import est412.wordstrainer.model.XLSXDictionary;
+import est412.wordstrainer.model.XLSXAspDictionary;
 import est412.wordstrainer.model.DictionaryIterator;
 
 public class WordsTrainerController {
@@ -66,7 +66,7 @@ public class WordsTrainerController {
         if (file == null) return;
         
         try {
-        	dict = new XLSXDictionary(file.getAbsolutePath());
+        	dict = new XLSXAspDictionary(file.getAbsolutePath());
         } catch (Exception e) {
         	e.printStackTrace();
         }
@@ -160,6 +160,7 @@ public class WordsTrainerController {
 		try { 
 			if (dict != null) {
 				//dict.save();
+				
 				dict.close();
 			}
 		} catch (Exception e) {

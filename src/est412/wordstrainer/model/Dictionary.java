@@ -4,11 +4,11 @@ import java.io.IOException;
 
 public interface Dictionary {
 
-	public abstract void open(String fileName) throws IOException;
+	public abstract void open(String fileName) throws Exception;
 
-	public abstract void save() throws IOException;
+	public abstract void save() throws Exception;
 
-	public abstract void close() throws IOException;
+	public abstract void close() throws Exception;
 
 	public abstract int getWordsNumber();
 

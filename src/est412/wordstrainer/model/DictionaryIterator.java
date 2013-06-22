@@ -157,6 +157,7 @@ public class DictionaryIterator {
 		idxEmptyTotal.bind(Bindings.and(idxEmpty[0], idxEmpty[1]));
 		idxWordsNumber.set(dict.getWordsNumber());
 		initIndex();
+		//System.out.println(wb);
 	}
 	
 	public void clearCurWord() {

@@ -1,7 +1,5 @@
 package est412.wordstrainer.model;
 
-import java.io.IOException;
-
 public interface Dictionary {
 
 	public abstract void open(String fileName) throws Exception;

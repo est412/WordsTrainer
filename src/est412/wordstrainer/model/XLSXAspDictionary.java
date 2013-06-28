@@ -7,80 +7,87 @@ import com.aspose.cells.Workbook;
 import com.aspose.cells.Worksheet;
 
 public class XLSXAspDictionary implements Dictionary {
-	protected int wordsNum;
-	private Workbook wb;
-	private Worksheet ws;
-	String fileName; 
+	protected int wordsNum; // количество слов в словаре = к-во строк в файле
+	private Workbook wb; //таблица 
+	private Worksheet ws; //вкладка словар€
+	private Worksheet ws1; //вкладка с метками повторени€
+	String fileName; //им€ файла
 	
+	//словарь существует только в связи с открытым файлом
 	public XLSXAspDictionary(String fileName) throws Exception {
 		this.fileName = fileName;
 		open(fileName);
 	}
 	
+	//пон€тно
 	@Override
 	public void open(String fileName) throws Exception {
 		LoadOptions loadOptions = new LoadOptions(FileFormatType.XLSX);
 		wb = new Workbook(fileName, loadOptions);
 		ws = wb.getWorksheets().get(0);
+		ws1 = wb.getWorksheets().get(1);
 		wordsNum = ws.getCells().getMaxRow() + 1;
 		wb.getWorksheets().removeAt("Evaluation Warning");
 	}
 	
+	//пон€тно
 	@Override
-	public void save() throws Exception {
-		wb.save(fileName);
-		
+	public void save() {
+		wb.getWorksheets().removeAt("Evaluation Warning");
+		try {
+			wb.save(fileName);
+		} catch (Exception e) {
+			System.out.println(e.getStackTrace());
+		}
 	}
 	
+	//пон€тно
 	@Override
-	public void close() throws Exception {
+	public void close() {
 		save();
 	}
-
+	
+	//геттер
 	@Override
 	public int getWordsNumber() {
 		return wordsNum;
 	}
 	
+	//выдает нужное слово нужного €зыка
 	@Override
 	public String getWord(int lang, int count) {
+		//if (ws == null || ws.getCells() == null) return null;
 		return ws.getCells().get(count, lang).getValue().toString();
 	}
 	
+	//провер€ет наличие метки повтора
 	@Override
 	public boolean isToRepeat(int lang, int count) {
-		//XSSFCell cell = sheet.getRow(count).getCell(lang+2);
-		//Cell cell = ws.getRow(count).getCell(lang+4);
-		//if (cell == null) return false;
-		return true;//(cell.getNumericCellValue() == 1);
+		//if (ws1 == null || ws1.getCells() == null) return false;
+		Cell c = ws1.getCells().get(count, lang);
+		if (c == null || c.getValue() == null) return false;
+		return true;
 	}
 	
+	//устанавливает/или очищает метку повтора и сохран€ет файл
 	@Override
 	public void setToRepeat(int lang, int count, boolean is) {
-		//XSSFCell cell = sheet.getRow(count).getCell(lang+2);
-		System.out.println("");
-		//Cell cell = ws.getRow(count).getCell(lang+4);
-		//if (cell == null) {
-		//	cell = ws.getRow(count).createCell(lang+4);
-		//	cell.setCellType(Cell.CELL_TYPE_NUMERIC);
-		//}
-		//System.out.println("set "+count+" "+is);
-		//cell.setCellValue(is ? 1 : 0);
-		//pkg.flush();
-		//		wb.write(outStream);
-		//System.out.println("flushed");
+		Cell c = ws1.getCells().get(count, lang);
+		c.setValue(is ? 1 : null);
+		save();
 	}
 	
+	//парсит €чейку с примерами и выдает пример нужного €зыка
+	@Override
 	public String getExample(int lang, int count) {
 		Cell c = ws.getCells().get(count, 2);
-		//System.out.println(c);
 		if (c == null || c.getValue() == null) return "";
 		String str = c.getValue().toString();
-		String str1[] = str.split("\n");
+		String str1[] = str.split("\n"); // разделитель между примерами
 		String str2[];
 		str = "";
 		for (int i = 0; i < str1.length; i++ ) {
-			str2 = str1[i].split(" Ч ");
+			str2 = str1[i].split(" Ч "); // разделитель между €зыками
 			str = str + (i+1) + ": " + str2[lang] + "\n";
 		}
 		return str;

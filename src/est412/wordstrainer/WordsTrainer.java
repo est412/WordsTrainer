@@ -14,7 +14,7 @@ public class WordsTrainer extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
-		//System.out.println(111);
+		System.out.println(111);
 		mainStage = stage;
 		Parent root = FXMLLoader.load(getClass().getResource("WordsTrainer.fxml"));
         stage.setTitle("Words Trainer");
@@ -26,6 +26,7 @@ public class WordsTrainer extends Application {
 			}
 		});
         stage.show();
+        //WordsTrainerController.init();
 }
 
 	public static void main(String[] args) {

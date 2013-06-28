@@ -1,13 +1,18 @@
 package est412.wordstrainer;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Dialogs;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
@@ -23,7 +28,7 @@ public class WordsTrainerController {
 	@FXML private TextArea textareaLang1;
 	@FXML private Label labelFile;
 	private TextArea[] textareaLang = new TextArea[2];
-	@FXML private CheckBox checkboxRepeat;
+	@FXML private CheckBox checkboxToRepeat;
 	@FXML private CheckBox checkboxExample;
 	@FXML private CheckBox checkboxLang0;
 	@FXML private CheckBox checkboxLang1;
@@ -32,12 +37,13 @@ public class WordsTrainerController {
 	@FXML private Label labelIdxWordsCntLang0;
 	@FXML private Label labelIdxWordsCntLang1;
 	@FXML private Label labelIdxWordsNumber;
-	@FXML private Button buttonRepeat;
 	@FXML private Button buttonNext;
 	@FXML private Button buttonRestart;
 	@FXML private HBox hboxLang;
 	@FXML private TextArea textareaLang0Example;
 	@FXML private TextArea textareaLang1Example;
+	@FXML private ChoiceBox<String> choiceboxMode;
+	//public Stage stage;
 	
 	static private Dictionary dict;
 	private DictionaryIterator dictIterator;
@@ -45,13 +51,31 @@ public class WordsTrainerController {
 	private int toShow;
 	private int shown;
 	
-	BooleanBinding isCheckBoxRndEnable;
+	private List<String> modes = new ArrayList<String>();
 		
-	@FXML protected void handleRepeatButtonAction(ActionEvent event) {
-		dictIterator.addToRepeat();
+	BooleanBinding isCheckBoxRndEnable;
+	
+	public WordsTrainerController() {
+		modes.add("Все слова");
+		modes.add("Повторение");
+	}
+	
+	@FXML
+	protected void initialize() {
+		choiceboxMode.setItems(FXCollections.observableArrayList("Все слова", "Повторение"));
+		choiceboxMode.setValue("Все слова");
+		
+	}
+	
+	public String selectMode() {
+		String str = Dialogs.showInputDialog(WordsTrainer.mainStage, "",
+			    "Выбор режима работы", "Выбор режима работы", "Все слова", modes);
+		return str;
 	}
 	
 	@FXML protected void handleFileButtonAction(ActionEvent event) {
+		String str = selectMode();
+		if (str == null) return;
 		FileChooser fileChooser = new FileChooser();
 		File initDir = new File(System.getProperty("user.dir"));
 		 
@@ -59,13 +83,15 @@ public class WordsTrainerController {
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XLSX files (*.xlsx)", "*.xlsx");
         fileChooser.getExtensionFilters().add(extFilter);
         fileChooser.setInitialDirectory(initDir);
-        
        
         //Show open file dialog
         file = fileChooser.showOpenDialog(WordsTrainer.mainStage);
         if (file == null) return;
         
         try {
+			if (dict != null) {
+				dict.close();
+			}
         	dict = new XLSXAspDictionary(file.getAbsolutePath());
         } catch (Exception e) {
         	e.printStackTrace();
@@ -76,27 +102,38 @@ public class WordsTrainerController {
         checkboxLang[1] = checkboxLang1;
         labelFile.setText(file.getAbsolutePath());
         dictIterator = new DictionaryIterator(dict);
-        buttonRepeat.disableProperty().setValue(true);
-        buttonNext.disableProperty().unbind();
-        buttonNext.disableProperty().setValue(false);
+        System.out.println(str+" "+modes.indexOf(str));
+        dictIterator.mode.set(modes.indexOf(str));
+        buttonNext.disableProperty().unbind(); //?
+        buttonNext.disableProperty().setValue(false); //?
         buttonRestart.disableProperty().setValue(true);
         hboxLang.setDisable(false);
-        //checkboxRepeat.disableProperty().setValue(true);
+        checkboxExample.disableProperty().setValue(false);
         changeSystemState();
         setBindings();
         toShow = 1;
         shown = -1;
+        checkboxToRepeat.setDisable(true);
+        choiceboxMode.setDisable(false);
 	}
 	
 	@FXML protected void handleRestartButtonAction(ActionEvent event) {
+		String str = selectMode();
+		if (str == null) return;
+        dictIterator = new DictionaryIterator(dict);
+        dictIterator.mode.set(modes.indexOf(str));
 		dictIterator.initIndex();
 		dictIterator.clearCurWord();
-		buttonRepeat.disableProperty().setValue(true);
 		toShow = 1;
 		shown = -1;
+		changeSystemState();
+		setBindings();
+		checkboxToRepeat.setDisable(true);
+		choiceboxMode.setDisable(false);
 	}
 		
 	@FXML protected void handleNextButtonAction(ActionEvent event) {
+		choiceboxMode.setDisable(true);
 		if (toShow == 1) {
 			buttonNext.disableProperty().unbind();
 			dictIterator.nextWord();
@@ -127,7 +164,7 @@ public class WordsTrainerController {
 			changeSystemState();
 		}
 		buttonRestart.disableProperty().setValue(false);
-		//System.out.println(isCheckBoxRndDisable.get());
+		checkboxToRepeat.setDisable(false);
 	}
 	
 	@FXML protected void handleExampleCheckBoxAction(ActionEvent event) {
@@ -145,11 +182,6 @@ public class WordsTrainerController {
 		changeSystemState();
 	}
 	
-	@FXML protected void handleRepeatCheckBoxAction(ActionEvent event) {
-		//dict.setToRepeat(dictIterator.getCurLang(), dictIterator.getCurWordCnt(), checkboxRepeat.isSelected());
-		
-	}
-		
 	@FXML protected void handleLang1CheckBoxAction(ActionEvent event) {
 		if (!checkboxLang0.isSelected() && !checkboxLang1.isSelected()) 
 			checkboxLang0.setSelected(true);
@@ -159,8 +191,6 @@ public class WordsTrainerController {
 	static protected void handleStageCloseRequest(WindowEvent we) {
 		try { 
 			if (dict != null) {
-				//dict.save();
-				
 				dict.close();
 			}
 		} catch (Exception e) {
@@ -168,25 +198,24 @@ public class WordsTrainerController {
 		}
 	}
 	
+	@FXML protected void handleRepeatCheckBoxAction(ActionEvent event) {
+		
+	}
+	
 	private void changeSystemState() {
-		//System.out.println("здесь");
-		buttonNext.disableProperty().unbind();
 		if (checkboxLang0.isSelected() && checkboxLang1.isSelected()) {
-			dictIterator.setActiveLangs(-1);
-			buttonNext.disableProperty().bind(dictIterator.idxEmptyTotalProperty());
+			dictIterator.setActiveLangs(2);
 		}
 		if (!checkboxLang0.isSelected()) {
 			dictIterator.setActiveLangs(1);
-			buttonNext.disableProperty().bind(dictIterator.idxEmptyProperty(1));
 		}
 		if (!checkboxLang1.isSelected()) {
 			dictIterator.setActiveLangs(0);
-			buttonNext.disableProperty().bind(dictIterator.idxEmptyProperty(0));
 		}
+		buttonNext.disableProperty().bind(dictIterator.showEmpty);
 	}
 	
 	private void setBindings() {
-		//System.out.println("set bind");
 		checkboxLang0.disableProperty().bind(dictIterator.idxEmptyProperty(0));
 		checkboxLang1.disableProperty().bind(dictIterator.idxEmptyProperty(1));
 		
@@ -203,12 +232,12 @@ public class WordsTrainerController {
 		textareaLang0Example.textProperty().bind(dictIterator.curExampleProperty(0));
 		textareaLang1Example.textProperty().bind(dictIterator.curExampleProperty(1));
 		
-		labelIdxWordsCntLang0.textProperty().bind(dictIterator.idxWordsCounterProperty(0).asString());
-		labelIdxWordsCntLang1.textProperty().bind(dictIterator.idxWordsCounterProperty(1).asString());
-		labelIdxWordsNumber.textProperty().bind(dictIterator.idxWordsNumberProperty().asString());
+		labelIdxWordsCntLang1.textProperty().bind(dictIterator.showCounter.asString());
+		labelIdxWordsNumber.textProperty().bind(dictIterator.showNumber.asString());
 		
-		//System.out.println("111");
-		checkboxRepeat.selectedProperty().bindBidirectional(dictIterator.toRepeat);
+		checkboxToRepeat.selectedProperty().bindBidirectional(dictIterator.toRepeat);
+		
+		buttonNext.disableProperty().bind(dictIterator.showEmpty);
 		
 		dictIterator.showExampleProperty().bind(checkboxExample.selectedProperty());
 	}

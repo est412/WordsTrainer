@@ -18,74 +18,65 @@ import javafx.collections.ObservableList;
 public class DictionaryIterator {
 	private Dictionary dict;
 	private int curLang; // 0 = foreing, 1 = russian
-	private int activeLangs; // -1 = both; 0 = foreing, 1 = russian
+	private int activeLangs; // 0 = foreing, 1 = russian; 2 = both
 	
+	//индекс для хранения двух списков - по языкам
 	private List<ObservableList<Integer>> wordsIndex = new ArrayList<ObservableList<Integer>>();
-	
+		
 	private int curWordIdx;
 	private int curWordPos;
-	private BooleanProperty[] idxEmpty = new SimpleBooleanProperty[2];
-	private BooleanProperty idxEmptyTotal = new SimpleBooleanProperty();
+	private BooleanProperty[] idxEmpty = new SimpleBooleanProperty[3];
 	private BooleanProperty langRnd = new SimpleBooleanProperty(false);
 	private StringProperty[] curWord = new SimpleStringProperty[2];
 	private StringProperty[] curExample = new SimpleStringProperty[2];
-	private IntegerProperty idxWordsNumber = new SimpleIntegerProperty();
-	private IntegerProperty[] idxWordsCounter = new SimpleIntegerProperty[2];
+	private IntegerProperty[] idxWordsNumber = new SimpleIntegerProperty[3];
+	private IntegerProperty[] idxWordsCounter = new SimpleIntegerProperty[3];
 	private BooleanProperty showExample = new SimpleBooleanProperty();
+	public BooleanProperty toRepeat = new SimpleBooleanProperty();
+	private String[] buffer = new String[4];
+	private boolean[] repBuffer = new boolean[2];
+	public BooleanProperty repeat = new SimpleBooleanProperty();
+	public IntegerProperty mode = new SimpleIntegerProperty();
+	public IntegerProperty showNumber = new SimpleIntegerProperty();
+	public IntegerProperty showCounter = new SimpleIntegerProperty();
+	public BooleanProperty showEmpty = new SimpleBooleanProperty();
 	
+	//выставляет значения пропертей, т.к. сами свойства списка пропертями не являются
 	private InvalidationListener invalListener0 = new InvalidationListener() {
 		@Override
 		public void invalidated(Observable observable) {
-    		setIdxEmpty(0, wordsIndex.get(0).isEmpty());
-    		calcIdxWordsCounter();
+   		idxEmpty[0].set(wordsIndex.get(0).isEmpty());
+    		idxWordsCounter[0].set(idxWordsNumber[0].get() - wordsIndex.get(0).size());
 		} // invalidated 
 	};
 	
+	//выставляет значения пропертей, т.к. сами свойства списка пропертями не являются
 	private InvalidationListener invalListener1 = new InvalidationListener() {
 		@Override
 		public void invalidated(Observable observable) {
-    		setIdxEmpty(1, wordsIndex.get(1).isEmpty());
-    		calcIdxWordsCounter();
-		} // invalidated 
+    		idxEmpty[1].set(wordsIndex.get(1).isEmpty());
+    		idxWordsCounter[1].set(idxWordsNumber[1].get() - wordsIndex.get(1).size());
+ 		} // invalidated 
 	};
 	
-	private String[] buffer = new String[4];
-	
-	public BooleanProperty toRepeat = new SimpleBooleanProperty();
+	//сохраняет в словарь изменившееся свойство toRepeat
+	private InvalidationListener invalListenerToRepeat = new InvalidationListener() {
+		@Override
+		public void invalidated(Observable observable) {
+    		dict.setToRepeat(curLang, curWordPos, toRepeat.get());
+ 		} // invalidated 
+	};
 	
 	public boolean isIdxEmpty(int lang) {
 		return idxEmpty[lang].get();
 	}
 	
-	protected void setIdxEmpty(int lang, boolean empty) {
-		idxEmpty[lang].set(empty);
-	}
-
 	public BooleanProperty idxEmptyProperty(int lang) {
 		return idxEmpty[lang];
 	}
 	
 	public boolean isLangRnd() {
 		return langRnd.get();
-	}
-	
-	/*
-	public boolean isIdxEmptyTotal() {
-		return idxEmpty[0].get() && idxEmpty[1].get();
-	}
-	
-	protected void setIdxEmptyTotal(boolean empty) {
-		idxEmpty[0].set(empty);
-		idxEmpty[1].set(empty);
-	}*/
-
-	public BooleanProperty idxEmptyTotalProperty() {
-		return idxEmptyTotal;
-	}
-	
-	
-	protected void setLangRnd(boolean rnd) {
-		langRnd.set(rnd);
 	}
 	
 	public BooleanProperty langRndProperty() {
@@ -96,10 +87,6 @@ public class DictionaryIterator {
 		return curWord[lang].get();
 	}
 	
-	protected void setCurWord(int lang, String word) {
-		curWord[lang].set(word);
-	}
-	
 	public StringProperty curWordProperty(int lang) {
 		return curWord[lang];
 	}
@@ -108,32 +95,20 @@ public class DictionaryIterator {
 		return curExample[lang].get();
 	}
 	
-	protected void setCurExample(int lang, String word) {
-		curExample[lang].set(word);
-	}
-	
 	public StringProperty curExampleProperty(int lang) {
 		return curExample[lang];
 	}
 	
-	public int getIdxWordsNumber() {
-		return idxWordsNumber.get();
+	public int getIdxWordsNumber(int lang) {
+		return idxWordsNumber[lang].get();
 	}
 	
-	protected void setIdxWordsNumber(int number) {
-		idxWordsNumber.set(number);
-	}
-	
-	public IntegerProperty idxWordsNumberProperty() {
-		return idxWordsNumber;
+	public IntegerProperty idxWordsNumberProperty(int lang) {
+		return idxWordsNumber[lang];
 	}
 		
 	public int getIdxWordsCounder(int lang) {
 		return idxWordsCounter[lang].get();
-	}
-	
-	protected void setIdxWordsCounter(int lang, int cnt) {
-		idxWordsCounter[lang].set(cnt);
 	}
 	
 	public IntegerProperty idxWordsCounterProperty(int lang) {
@@ -148,27 +123,69 @@ public class DictionaryIterator {
 		this.dict = dict;
 		idxEmpty[0] = new SimpleBooleanProperty();
 		idxEmpty[1] = new SimpleBooleanProperty();
+		idxEmpty[2] = new SimpleBooleanProperty();
 		curWord[0] = new SimpleStringProperty();
 		curWord[1] = new SimpleStringProperty();
 		curExample[0] = new SimpleStringProperty();
 		curExample[1] = new SimpleStringProperty();
 		idxWordsCounter[0] = new SimpleIntegerProperty();
 		idxWordsCounter[1] = new SimpleIntegerProperty();
-		idxEmptyTotal.bind(Bindings.and(idxEmpty[0], idxEmpty[1]));
-		idxWordsNumber.set(dict.getWordsNumber());
+		idxWordsCounter[2] = new SimpleIntegerProperty();
+		idxWordsNumber[0] = new SimpleIntegerProperty();
+		idxWordsNumber[1] = new SimpleIntegerProperty();
+		idxWordsNumber[2] = new SimpleIntegerProperty();
+		idxWordsNumber[0].set(dict.getWordsNumber());
 		initIndex();
-		//System.out.println(wb);
+		idxEmpty[2].bind(Bindings.and(idxEmpty[0], idxEmpty[1]));
+		idxWordsCounter[2].bind(Bindings.add(idxWordsCounter[0], idxWordsCounter[1]));
+		idxWordsNumber[2].bind(Bindings.add(idxWordsNumber[0], idxWordsNumber[1]));
 	}
 	
+	public void initIndex() {
+		clearShowBindings();
+		wordsIndex.clear();
+		ObservableList<Integer> tmp = FXCollections.observableArrayList();
+		wordsIndex.add(tmp);
+		tmp = FXCollections.observableArrayList();
+		wordsIndex.add(tmp);
+		
+		wordsIndex.get(0).addListener(invalListener0);
+		wordsIndex.get(1).addListener(invalListener1);
+		toRepeat.addListener(invalListenerToRepeat);
+		
+		System.out.println("initIndex " + mode.get()); //!!!! вызывается раньше чем устанавливается моде. перейти на чойсбокс
+		if (mode.get() == 0) {
+			for (int i = 0; i < dict.getWordsNumber(); i++) {
+				wordsIndex.get(0).add(new Integer(i));
+				wordsIndex.get(1).add(new Integer(i));
+			}
+		} else {
+			for (int i = 0; i < dict.getWordsNumber(); i++) {
+				if (dict.isToRepeat(0, i)) wordsIndex.get(0).add(new Integer(i));
+				if (dict.isToRepeat(1, i)) wordsIndex.get(1).add(new Integer(i));
+			}
+		}
+		idxWordsNumber[0].set(wordsIndex.get(0).size());
+		idxWordsNumber[1].set(wordsIndex.get(1).size());
+		idxWordsCounter[0].set(0);
+		idxWordsCounter[1].set(0);
+		setShowBindings(curLang);
+	} // initIndex()
+
+	
 	public void clearCurWord() {
-		setCurWord(0, "");
-		setCurWord(1, "");
-		setCurExample(0, "");
-		setCurExample(1, "");
+		curWord[0].set("");
+		curWord[1].set("");
+		hideExamples();
+	}
+	
+	public void hideExamples() {
+		curExample[0].set("");
+		curExample[1].set("");
 	}
 	
 	private void nextLang() {
-		if (activeLangs == -1) switchCurLang();
+		if (activeLangs == 2) switchCurLang();
 		else setCurLang(activeLangs);
 	}
 	
@@ -181,43 +198,50 @@ public class DictionaryIterator {
 		buffer[1] = dict.getWord(1, curWordPos);
 		buffer[2] = dict.getExample(0, curWordPos);
 		buffer[3] = dict.getExample(1, curWordPos);
-		setCurWord(curLang, buffer[curLang]);
+		repBuffer[0] = dict.isToRepeat(0, curWordPos);
+		repBuffer[1] = dict.isToRepeat(1, curWordPos);
+		curWord[curLang].set(buffer[curLang]);
+		toRepeat.set(repBuffer[curLang]);
+		
 		wordsIndex.get(curLang).remove(curWordIdx);
 	}
 	
 	public void translateCurWord() {
 		int lang = (curLang == 0 ? 1 : 0);
-		setCurWord(lang, buffer[lang]);
+		curWord[lang].set(buffer[lang]);
 	}
 	
 	public void showExample() {
 		if (buffer[curLang+2].equals("")) buffer[curLang+2] = "---";
-		//if (!showExample.get()) buffer[curLang+2] = ""; // сделать ф-ю hideEx
-		setCurExample(curLang, buffer[curLang+2]);
+		curExample[curLang].set(buffer[curLang+2]);
 	}
 	
 	public void showTrExample() {
 		int lang = (curLang == 0 ? 1 : 0);
 		if (buffer[lang+2].equals("")) buffer[lang+2] = "---";
-		//if (!showExample.get()) buffer[lang+2] = ""; // сделать ф-ю hideEx
-		setCurExample(lang, buffer[lang+2]);
+		curExample[lang].set(buffer[lang+2]);
 	}
 	
-	public void hideExamples() {
-		setCurExample(0, "");
-		setCurExample(1, "");
+	public void setShowBindings(int lang) {
+		showCounter.bind(idxWordsCounter[lang]);
+		showNumber.bind(idxWordsNumber[lang]);
+		showEmpty.bind(idxEmpty[lang]);
+	}
+	
+	public void clearShowBindings() {
+		showCounter.unbind();
+		showNumber.unbind();
+		showEmpty.unbind();
 	}
 	
 	public void setActiveLangs(int langs) {
 		activeLangs = langs;
+		setShowBindings(langs);
 	}
 	
 	public void setCurLang(int lang) {
 		curLang = lang;
-	}
-	
-	public int getCurLang() {
-		return curLang;
+		setShowBindings(lang);
 	}
 	
 	public void switchCurLang() {
@@ -230,29 +254,4 @@ public class DictionaryIterator {
 			if (isIdxEmpty(curLang)) curLang = (curLang == 0 ? 1 : 0);
 		}
 	}
-	
-	private void calcIdxWordsCounter() {
-		int wordsNum = dict.getWordsNumber();
-		idxWordsCounter[0].set(wordsNum - wordsIndex.get(0).size());
-		idxWordsCounter[1].set(wordsNum - wordsIndex.get(1).size());
-	}
-	
-	public void addToRepeat() {
-	};
-	
-	
-	public void initIndex() {
-		curWordIdx = -1;
-		wordsIndex.clear();
-		ObservableList<Integer> tmp = FXCollections.observableArrayList();
-		wordsIndex.add(tmp);
-		tmp = FXCollections.observableArrayList();
-		wordsIndex.add(tmp);
-		wordsIndex.get(0).addListener(invalListener0);
-		wordsIndex.get(1).addListener(invalListener1);
-		for (int i = 0; i < dict.getWordsNumber(); i++) {
-			wordsIndex.get(0).add(new Integer(i));
-			wordsIndex.get(1).add(new Integer(i));
-		} // for
-	} // initIndex()
 } // class

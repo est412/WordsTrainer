@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="499.0" prefWidth="573.0" xmlns:fx="http://javafx.com/fxml" fx:controller="est412.wordstrainer.WordsTrainerController">
+<AnchorPane fx:id="anchorpaneMain" prefHeight="499.0" prefWidth="573.0" xmlns:fx="http://javafx.com/fxml" fx:controller="est412.wordstrainer.WordsTrainerController">
   <!-- TODO Add Nodes -->
   <children>
     <HBox id="HBox" fx:id="hboxLang" alignment="CENTER" disable="true" fillHeight="true" prefHeight="21.0" prefWidth="278.0" spacing="20.0" visible="true" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="15.0">

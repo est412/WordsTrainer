@@ -67,6 +67,13 @@ public class DictionaryIterator {
  		} // invalidated 
 	};
 	
+	private InvalidationListener invalListenerMode = new InvalidationListener() {
+		@Override
+		public void invalidated(Observable observable) {
+    		initIndex();
+ 		} // invalidated 
+	};
+	
 	public boolean isIdxEmpty(int lang) {
 		return idxEmpty[lang].get();
 	}
@@ -139,6 +146,7 @@ public class DictionaryIterator {
 		idxEmpty[2].bind(Bindings.and(idxEmpty[0], idxEmpty[1]));
 		idxWordsCounter[2].bind(Bindings.add(idxWordsCounter[0], idxWordsCounter[1]));
 		idxWordsNumber[2].bind(Bindings.add(idxWordsNumber[0], idxWordsNumber[1]));
+		mode.addListener(invalListenerMode);
 	}
 	
 	public void initIndex() {
@@ -153,7 +161,7 @@ public class DictionaryIterator {
 		wordsIndex.get(1).addListener(invalListener1);
 		toRepeat.addListener(invalListenerToRepeat);
 		
-		System.out.println("initIndex " + mode.get()); //!!!! вызывается раньше чем устанавливается моде. перейти на чойсбокс
+		System.out.println("initIndex " + mode.get());
 		if (mode.get() == 0) {
 			for (int i = 0; i < dict.getWordsNumber(); i++) {
 				wordsIndex.get(0).add(new Integer(i));

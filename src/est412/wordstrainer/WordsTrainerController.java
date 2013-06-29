@@ -8,15 +8,17 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Dialogs;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 import est412.wordstrainer.model.Dictionary;
@@ -43,13 +45,14 @@ public class WordsTrainerController {
 	@FXML private TextArea textareaLang0Example;
 	@FXML private TextArea textareaLang1Example;
 	@FXML private ChoiceBox<String> choiceboxMode;
-	//public Stage stage;
-	
-	static private Dictionary dict;
+	@FXML private AnchorPane anchorpaneMain;
+		
+	private Dictionary dict;
 	private DictionaryIterator dictIterator;
 	private File file;
 	private int toShow;
 	private int shown;
+	private Stage mainStage;
 	
 	private List<String> modes = new ArrayList<String>();
 		
@@ -63,19 +66,26 @@ public class WordsTrainerController {
 	@FXML
 	protected void initialize() {
 		choiceboxMode.setItems(FXCollections.observableArrayList("Все слова", "Повторение"));
-		choiceboxMode.setValue("Все слова");
-		
+		choiceboxMode.getSelectionModel().selectFirst();
 	}
 	
-	public String selectMode() {
-		String str = Dialogs.showInputDialog(WordsTrainer.mainStage, "",
-			    "Выбор режима работы", "Выбор режима работы", "Все слова", modes);
-		return str;
+	public void initStage(Stage stage) {
+		mainStage = stage;
+		mainStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+			@Override
+			public void handle(WindowEvent we) {
+				try { 
+					if (dict != null) {
+						dict.close();
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 	
 	@FXML protected void handleFileButtonAction(ActionEvent event) {
-		String str = selectMode();
-		if (str == null) return;
 		FileChooser fileChooser = new FileChooser();
 		File initDir = new File(System.getProperty("user.dir"));
 		 
@@ -85,7 +95,7 @@ public class WordsTrainerController {
         fileChooser.setInitialDirectory(initDir);
        
         //Show open file dialog
-        file = fileChooser.showOpenDialog(WordsTrainer.mainStage);
+        file = fileChooser.showOpenDialog(mainStage);
         if (file == null) return;
         
         try {
@@ -102,8 +112,6 @@ public class WordsTrainerController {
         checkboxLang[1] = checkboxLang1;
         labelFile.setText(file.getAbsolutePath());
         dictIterator = new DictionaryIterator(dict);
-        System.out.println(str+" "+modes.indexOf(str));
-        dictIterator.mode.set(modes.indexOf(str));
         buttonNext.disableProperty().unbind(); //?
         buttonNext.disableProperty().setValue(false); //?
         buttonRestart.disableProperty().setValue(true);
@@ -115,14 +123,13 @@ public class WordsTrainerController {
         shown = -1;
         checkboxToRepeat.setDisable(true);
         choiceboxMode.setDisable(false);
-	}
+        dictIterator.mode.unbind();
+        dictIterator.mode.bind(choiceboxMode.getSelectionModel().selectedIndexProperty());
+  	}
 	
 	@FXML protected void handleRestartButtonAction(ActionEvent event) {
-		String str = selectMode();
-		if (str == null) return;
         dictIterator = new DictionaryIterator(dict);
-        dictIterator.mode.set(modes.indexOf(str));
-		dictIterator.initIndex();
+		//dictIterator.initIndex();
 		dictIterator.clearCurWord();
 		toShow = 1;
 		shown = -1;
@@ -130,6 +137,8 @@ public class WordsTrainerController {
 		setBindings();
 		checkboxToRepeat.setDisable(true);
 		choiceboxMode.setDisable(false);
+		dictIterator.mode.unbind();
+		dictIterator.mode.bind(choiceboxMode.getSelectionModel().selectedIndexProperty());
 	}
 		
 	@FXML protected void handleNextButtonAction(ActionEvent event) {
@@ -188,14 +197,7 @@ public class WordsTrainerController {
 		changeSystemState();
 	}
 	
-	static protected void handleStageCloseRequest(WindowEvent we) {
-		try { 
-			if (dict != null) {
-				dict.close();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	protected void handleStageCloseRequest(WindowEvent we) {
 	}
 	
 	@FXML protected void handleRepeatCheckBoxAction(ActionEvent event) {

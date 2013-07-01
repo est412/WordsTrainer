@@ -8,24 +8,24 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="anchorpaneMain" prefHeight="499.0" prefWidth="573.0" xmlns:fx="http://javafx.com/fxml" fx:controller="est412.wordstrainer.WordsTrainerController">
+<AnchorPane fx:id="anchorpaneMain" prefHeight="499.0" prefWidth="573.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="est412.wordstrainer.WordsTrainerController">
   <!-- TODO Add Nodes -->
   <children>
+    <ChoiceBox fx:id="choiceboxMode" disable="true" prefWidth="146.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="15.0">
+      <items>
+        <FXCollections fx:factory="observableArrayList">
+          <String fx:value="Item 1" />
+          <String fx:value="Item 2" />
+          <String fx:value="Item 3" />
+        </FXCollections>
+      </items>
+    </ChoiceBox>
     <HBox id="HBox" fx:id="hboxLang" alignment="CENTER" disable="true" fillHeight="true" prefHeight="21.0" prefWidth="278.0" spacing="20.0" visible="true" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="15.0">
       <children>
         <CheckBox fx:id="checkboxLang0" mnemonicParsing="false" onAction="#handleLang0CheckBoxAction" selected="true" text="Иностранный" textAlignment="LEFT" />
         <CheckBox fx:id="checkboxLang1" mnemonicParsing="false" onAction="#handleLang1CheckBoxAction" text="Русский" />
         <CheckBox fx:id="checkboxRndLang" mnemonicParsing="false" text="Случайно" />
       </children>
-    </HBox>
-    <HBox alignment="CENTER_RIGHT" prefHeight="21.0" prefWidth="198.0" spacing="20.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="90.0">
-      <children>
-        <CheckBox id="checkboxRepeat" fx:id="checkboxToRepeat" disable="true" graphicTextGap="4.0" mnemonicParsing="false" onAction="#handleRepeatCheckBoxAction" prefHeight="21.0" prefWidth="84.0" text="Повторить" />
-        <CheckBox fx:id="checkboxExample" alignment="CENTER_LEFT" contentDisplay="CENTER" disable="true" mnemonicParsing="false" onAction="#handleExampleCheckBoxAction" prefHeight="21.0" prefWidth="73.0" text="Примеры" />
-      </children>
-      <padding>
-        <Insets />
-      </padding>
     </HBox>
     <SplitPane dividerPositions="0.4961038961038961" focusTraversable="true" orientation="VERTICAL" prefHeight="207.0" prefWidth="317.0" AnchorPane.bottomAnchor="67.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="45.0">
       <items>
@@ -51,18 +51,18 @@
       </children>
     </HBox>
     <Separator prefWidth="315.0" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="2.0" />
-    <Button fx:id="buttonRestart" disable="true" mnemonicParsing="false" onAction="#handleRestartButtonAction" text="Restart" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="74.0" />
     <Label id="" fx:id="labelFile" text="&lt;Файл&gt;" textOverrun="CENTER_ELLIPSIS" wrapText="false" AnchorPane.bottomAnchor="51.0" AnchorPane.leftAnchor="14.0" />
     <Button defaultButton="false" mnemonicParsing="false" onAction="#handleFileButtonAction" text="Файл" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="14.0" />
+    <Button fx:id="buttonRestart" disable="true" mnemonicParsing="false" onAction="#handleRestartButtonAction" text="Restart" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="74.0" />
+    <HBox alignment="CENTER_RIGHT" prefHeight="21.0" prefWidth="198.0" spacing="20.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="90.0">
+      <children>
+        <CheckBox id="checkboxRepeat" fx:id="checkboxToRepeat" disable="true" graphicTextGap="4.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="84.0" text="Повторить" />
+        <CheckBox fx:id="checkboxExample" alignment="CENTER_LEFT" contentDisplay="CENTER" disable="true" mnemonicParsing="false" onAction="#handleExampleCheckBoxAction" prefHeight="21.0" prefWidth="73.0" text="Примеры" />
+      </children>
+      <padding>
+        <Insets />
+      </padding>
+    </HBox>
     <Button fx:id="buttonNext" disable="true" mnemonicParsing="false" onAction="#handleNextButtonAction" prefWidth="57.0" text="Next" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="14.0" />
-    <ChoiceBox fx:id="choiceboxMode" disable="true" prefWidth="146.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="15.0">
-      <items>
-        <FXCollections fx:factory="observableArrayList">
-          <String fx:value="Item 1" />
-          <String fx:value="Item 2" />
-          <String fx:value="Item 3" />
-        </FXCollections>
-      </items>
-    </ChoiceBox>
   </children>
 </AnchorPane>

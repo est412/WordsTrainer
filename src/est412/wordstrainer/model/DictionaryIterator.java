@@ -126,8 +126,7 @@ public class DictionaryIterator {
 		return showExample;
 	}
 	
-	public DictionaryIterator(Dictionary dict) {
-		this.dict = dict;
+	public DictionaryIterator() {
 		idxEmpty[0] = new SimpleBooleanProperty();
 		idxEmpty[1] = new SimpleBooleanProperty();
 		idxEmpty[2] = new SimpleBooleanProperty();
@@ -141,27 +140,36 @@ public class DictionaryIterator {
 		idxWordsNumber[0] = new SimpleIntegerProperty();
 		idxWordsNumber[1] = new SimpleIntegerProperty();
 		idxWordsNumber[2] = new SimpleIntegerProperty();
-		idxWordsNumber[0].set(dict.getWordsNumber());
-		initIndex();
+		
 		idxEmpty[2].bind(Bindings.and(idxEmpty[0], idxEmpty[1]));
 		idxWordsCounter[2].bind(Bindings.add(idxWordsCounter[0], idxWordsCounter[1]));
 		idxWordsNumber[2].bind(Bindings.add(idxWordsNumber[0], idxWordsNumber[1]));
-		mode.addListener(invalListenerMode);
-	}
-	
-	public void initIndex() {
-		clearShowBindings();
-		wordsIndex.clear();
+		
 		ObservableList<Integer> tmp = FXCollections.observableArrayList();
 		wordsIndex.add(tmp);
 		tmp = FXCollections.observableArrayList();
 		wordsIndex.add(tmp);
-		
 		wordsIndex.get(0).addListener(invalListener0);
 		wordsIndex.get(1).addListener(invalListener1);
-		toRepeat.addListener(invalListenerToRepeat);
 		
-		System.out.println("initIndex " + mode.get());
+		toRepeat.addListener(invalListenerToRepeat);
+
+		mode.addListener(invalListenerMode);
+	}
+	
+	public void setDictionary(Dictionary dict) {
+		this.dict = dict;
+		//initIndex();
+	}
+	
+	public void initIndex() {
+		idxWordsNumber[0].set(dict.getWordsNumber());
+		clearShowBindings();
+		wordsIndex.get(0).clear();
+		wordsIndex.get(1).clear();
+		//wordsIndex.clear();
+				
+		//System.out.println("initIndex " + mode.get() + " " + curLang);
 		if (mode.get() == 0) {
 			for (int i = 0; i < dict.getWordsNumber(); i++) {
 				wordsIndex.get(0).add(new Integer(i));
@@ -177,7 +185,7 @@ public class DictionaryIterator {
 		idxWordsNumber[1].set(wordsIndex.get(1).size());
 		idxWordsCounter[0].set(0);
 		idxWordsCounter[1].set(0);
-		setShowBindings(curLang);
+		setShowBindings(activeLangs);
 	} // initIndex()
 
 	

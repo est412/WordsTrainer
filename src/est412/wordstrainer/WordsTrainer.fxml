@@ -11,7 +11,7 @@
 <AnchorPane fx:id="anchorpaneMain" prefHeight="499.0" prefWidth="573.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="est412.wordstrainer.WordsTrainerController">
   <!-- TODO Add Nodes -->
   <children>
-    <ChoiceBox fx:id="choiceboxMode" disable="true" prefWidth="146.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="15.0">
+    <ChoiceBox fx:id="choiceboxMode" disable="true" opacity="0.4" prefWidth="146.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="15.0">
       <items>
         <FXCollections fx:factory="observableArrayList">
           <String fx:value="Item 1" />
@@ -56,8 +56,8 @@
     <Button fx:id="buttonRestart" disable="true" mnemonicParsing="false" onAction="#handleRestartButtonAction" text="Restart" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="74.0" />
     <HBox alignment="CENTER_RIGHT" prefHeight="21.0" prefWidth="198.0" spacing="20.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="90.0">
       <children>
-        <CheckBox id="checkboxRepeat" fx:id="checkboxToRepeat" disable="true" graphicTextGap="4.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="84.0" text="Повторить" />
         <CheckBox fx:id="checkboxExample" alignment="CENTER_LEFT" contentDisplay="CENTER" disable="true" mnemonicParsing="false" onAction="#handleExampleCheckBoxAction" prefHeight="21.0" prefWidth="73.0" text="Примеры" />
+        <CheckBox id="checkboxRepeat" fx:id="checkboxToRepeat" disable="true" graphicTextGap="4.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="84.0" text="Повторить" />
       </children>
       <padding>
         <Insets />

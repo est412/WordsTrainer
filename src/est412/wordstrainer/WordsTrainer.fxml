@@ -5,10 +5,8 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="anchorpaneMain" prefHeight="499.0" prefWidth="573.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="est412.wordstrainer.WordsTrainerController">
+<AnchorPane fx:id="anchorpaneMain" prefHeight="499.0" prefWidth="573.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="est412.wordstrainer.WordsTrainerController">
   <!-- TODO Add Nodes -->
   <children>
     <ChoiceBox fx:id="choiceboxMode" disable="true" opacity="0.4" prefWidth="146.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="15.0">

@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="at.bestsolution.efxclipse.tooling.jdt.core.JAVAFX_CONTAINER"/>
-	<classpathentry kind="lib" path="D:/_Lib_/Java/aspose/aspose-cells-7.5.0/lib/aspose-cells-7.5.0.jar"/>
-	<classpathentry kind="lib" path="D:/_Lib_/Java/aspose/aspose-cells-7.5.0/lib/bcprov-jdk16-146.jar"/>
-	<classpathentry kind="lib" path="D:/_Lib_/Java/aspose/aspose-cells-7.5.0/lib/dom4j-1.6.1.jar"/>
-	<classpathentry kind="lib" path="D:/_Lib_/Java/javafx-dialogs/javafx-dialogs-0.0.3.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.fx.ide.jdt.core.JAVAFX_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Aspose-cells 8.1.0"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

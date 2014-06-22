@@ -24,9 +24,12 @@ public class XLSXAspDictionary implements Dictionary {
 	public void open(String fileName) throws Exception {
 		LoadOptions loadOptions = new LoadOptions(FileFormatType.XLSX);
 		wb = new Workbook(fileName, loadOptions);
+		//TODO добавить проверку наличия 0го воркшита
 		ws = wb.getWorksheets().get(0);
+		if (wb.getWorksheets().getCount() < 2)
+			wb.getWorksheets().add();
 		ws1 = wb.getWorksheets().get(1);
-		wordsNum = ws.getCells().getMaxRow() + 1;
+		wordsNum = ws.getCells().getMaxDataRow() + 1;
 		wb.getWorksheets().removeAt("Evaluation Warning");
 	}
 	

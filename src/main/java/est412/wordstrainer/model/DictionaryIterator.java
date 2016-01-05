@@ -20,7 +20,7 @@ public class DictionaryIterator {
 	private int curLang; // 0 = foreing, 1 = russian
 	private int activeLangs; // 0 = foreing, 1 = russian; 2 = both
 	
-	//индекс для хранения двух списков - по языкам
+	//РёРЅРґРµРєСЃ РґР»СЏ С…СЂР°РЅРµРЅРёСЏ РґРІСѓС… СЃРїРёСЃРєРѕРІ - РїРѕ СЏР·С‹РєР°Рј
 	private List<ObservableList<Integer>> wordsIndex = new ArrayList<ObservableList<Integer>>();
 		
 	private int curWordIdx;
@@ -41,7 +41,7 @@ public class DictionaryIterator {
 	public IntegerProperty showCounter = new SimpleIntegerProperty();
 	public BooleanProperty showEmpty = new SimpleBooleanProperty();
 	
-	//выставляет значения пропертей, т.к. сами свойства списка пропертями не являются
+	//РІС‹СЃС‚Р°РІР»СЏРµС‚ Р·РЅР°С‡РµРЅРёСЏ РїСЂРѕРїРµСЂС‚РµР№, С‚.Рє. СЃР°РјРё СЃРІРѕР№СЃС‚РІР° СЃРїРёСЃРєР° РїСЂРѕРїРµСЂС‚СЏРјРё РЅРµ СЏРІР»СЏСЋС‚СЃСЏ
 	private InvalidationListener invalListener0 = new InvalidationListener() {
 		@Override
 		public void invalidated(Observable observable) {
@@ -50,7 +50,7 @@ public class DictionaryIterator {
 		} // invalidated 
 	};
 	
-	//выставляет значения пропертей, т.к. сами свойства списка пропертями не являются
+	//РІС‹СЃС‚Р°РІР»СЏРµС‚ Р·РЅР°С‡РµРЅРёСЏ РїСЂРѕРїРµСЂС‚РµР№, С‚.Рє. СЃР°РјРё СЃРІРѕР№СЃС‚РІР° СЃРїРёСЃРєР° РїСЂРѕРїРµСЂС‚СЏРјРё РЅРµ СЏРІР»СЏСЋС‚СЃСЏ
 	private InvalidationListener invalListener1 = new InvalidationListener() {
 		@Override
 		public void invalidated(Observable observable) {
@@ -59,7 +59,7 @@ public class DictionaryIterator {
  		} // invalidated 
 	};
 	
-	//сохраняет в словарь изменившееся свойство toRepeat
+	//СЃРѕС…СЂР°РЅСЏРµС‚ РІ СЃР»РѕРІР°СЂСЊ РёР·РјРµРЅРёРІС€РµРµСЃСЏ СЃРІРѕР№СЃС‚РІРѕ toRepeat
 	private InvalidationListener invalListenerToRepeat = new InvalidationListener() {
 		@Override
 		public void invalidated(Observable observable) {

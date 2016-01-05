@@ -58,7 +58,7 @@ public class WordsTrainerController {
 	
 	@FXML
 	protected void initialize() {
-		choiceboxMode.setItems(FXCollections.observableArrayList("Все слова", "Повторение"));
+		choiceboxMode.setItems(FXCollections.observableArrayList("Р’СЃРµ СЃР»РѕРІР°", "РџРѕРІС‚РѕСЂРµРЅРёРµ"));
 		choiceboxMode.getSelectionModel().selectFirst();
 	}
 	

@@ -7,24 +7,24 @@ import com.aspose.cells.Workbook;
 import com.aspose.cells.Worksheet;
 
 public class XLSXAspDictionary implements Dictionary {
-	protected int wordsNum; // количество слов в словаре = к-во строк в файле
-	private Workbook wb; //таблица 
-	private Worksheet ws; //вкладка словаря
-	private Worksheet ws1; //вкладка с метками повторения
-	String fileName; //имя файла
-	
-	//словарь существует только в свЯзи с открытым файлом
+	protected int wordsNum; // РєРѕР»РёС‡РµСЃС‚РІРѕ СЃР»РѕРІ РІ СЃР»РѕРІР°СЂРµ = Рє-РІРѕ СЃС‚СЂРѕРє РІ С„Р°Р№Р»Рµ
+	private Workbook wb; //С‚Р°Р±Р»РёС†Р°
+	private Worksheet ws; //РІРєР»Р°РґРєР° СЃР»РѕРІР°СЂСЏ
+	private Worksheet ws1; //РІРєР»Р°РґРєР° СЃ РјРµС‚РєР°РјРё РїРѕРІС‚РѕСЂРµРЅРёСЏ
+	String fileName; //РёРјСЏ С„Р°Р№Р»Р°
+
+	//СЃР»РѕРІР°СЂСЊ СЃСѓС‰РµСЃС‚РІСѓРµС‚ С‚РѕР»СЊРєРѕ РІ СЃРІРЇР·Рё СЃ РѕС‚РєСЂС‹С‚С‹Рј С„Р°Р№Р»РѕРј
 	public XLSXAspDictionary(String fileName) throws Exception {
 		this.fileName = fileName;
 		open(fileName);
 	}
-	
-	//понятно
+
+	//РїРѕРЅСЏС‚РЅРѕ
 	@Override
 	public void open(String fileName) throws Exception {
 		LoadOptions loadOptions = new LoadOptions(FileFormatType.XLSX);
 		wb = new Workbook(fileName, loadOptions);
-		//TODO добавить проверку наличия 0го воркшита
+		//TODO РґРѕР±Р°РІРёС‚СЊ РїСЂРѕРІРµСЂРєСѓ РЅР°Р»РёС‡РёСЏ 0РіРѕ РІРѕСЂРєС€РёС‚Р°
 		ws = wb.getWorksheets().get(0);
 		if (wb.getWorksheets().getCount() < 2)
 			wb.getWorksheets().add();
@@ -32,8 +32,8 @@ public class XLSXAspDictionary implements Dictionary {
 		wordsNum = ws.getCells().getMaxDataRow() + 1;
 		wb.getWorksheets().removeAt("Evaluation Warning");
 	}
-	
-	//понятно
+
+	//РїРѕРЅСЏС‚РЅРѕ
 	@Override
 	public void save() {
 		wb.getWorksheets().removeAt("Evaluation Warning");
@@ -43,27 +43,27 @@ public class XLSXAspDictionary implements Dictionary {
 			System.out.println(e.getStackTrace());
 		}
 	}
-	
-	//понятно
+
+	//РїРѕРЅСЏС‚РЅРѕ
 	@Override
 	public void close() {
 		save();
 	}
-	
-	//геттер
+
+	//РіРµС‚С‚РµСЂ
 	@Override
 	public int getWordsNumber() {
 		return wordsNum;
 	}
-	
-	//выдает нужное слово нужного языка
+
+	//РІС‹РґР°РµС‚ РЅСѓР¶РЅРѕРµ СЃР»РѕРІРѕ РЅСѓР¶РЅРѕРіРѕ СЏР·С‹РєР°
 	@Override
 	public String getWord(int lang, int count) {
 		//if (ws == null || ws.getCells() == null) return null;
 		return ws.getCells().get(count, lang).getValue().toString();
 	}
-	
-	//проверяет наличие метки повтора
+
+	//РїСЂРѕРІРµСЂСЏРµС‚ РЅР°Р»РёС‡РёРµ РјРµС‚РєРё РїРѕРІС‚РѕСЂР°
 	@Override
 	public boolean isToRepeat(int lang, int count) {
 		//if (ws1 == null || ws1.getCells() == null) return false;
@@ -71,26 +71,26 @@ public class XLSXAspDictionary implements Dictionary {
 		if (c == null || c.getValue() == null) return false;
 		return true;
 	}
-	
-	//устанавливает/или очищает метку повтора и сохраняет файл
+
+	//СѓСЃС‚Р°РЅР°РІР»РёРІР°РµС‚/РёР»Рё РѕС‡РёС‰Р°РµС‚ РјРµС‚РєСѓ РїРѕРІС‚РѕСЂР° Рё СЃРѕС…СЂР°РЅСЏРµС‚ С„Р°Р№Р»
 	@Override
 	public void setToRepeat(int lang, int count, boolean is) {
 		Cell c = ws1.getCells().get(count, lang);
 		c.setValue(is ? 1 : null);
 		save();
 	}
-	
-	//парсит ячейку с примерами и выдает пример нужного языка
+
+	//РїР°СЂСЃРёС‚ СЏС‡РµР№РєСѓ СЃ РїСЂРёРјРµСЂР°РјРё Рё РІС‹РґР°РµС‚ РїСЂРёРјРµСЂ РЅСѓР¶РЅРѕРіРѕ СЏР·С‹РєР°
 	@Override
 	public String getExample(int lang, int count) {
 		Cell c = ws.getCells().get(count, 2);
 		if (c == null || c.getValue() == null) return "";
 		String str = c.getValue().toString();
-		String str1[] = str.split("\n"); // разделитель между примерами
+		String str1[] = str.split("\n"); // СЂР°Р·РґРµР»РёС‚РµР»СЊ РјРµР¶РґСѓ РїСЂРёРјРµСЂР°РјРё
 		String str2[];
 		str = "";
 		for (int i = 0; i < str1.length; i++ ) {
-			str2 = str1[i].split(" — "); // разделитель между языками
+			str2 = str1[i].split(" вЂ” "); // СЂР°Р·РґРµР»РёС‚РµР»СЊ РјРµР¶РґСѓ СЏР·С‹РєР°РјРё
 			str = str + (i+1) + ": " + str2[lang] + "\n";
 		}
 		return str;

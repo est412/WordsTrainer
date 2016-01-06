@@ -10,14 +10,13 @@ public class WordsTrainer extends Application {
 	
 	@Override
 	public void start(Stage stage) throws Exception {
-		final FXMLLoader loader = new FXMLLoader(getClass().getResource("../../fxml/WordsTrainer.fxml"));
+		final FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/WordsTrainer.fxml"));
 		final Parent root = (Parent) loader.load();
         stage.setTitle("Words Trainer");
         stage.setScene(new Scene(root));
         final WordsTrainerController controller = loader.getController();
         controller.initStage(stage);
         stage.show();
-        //System.out.println(1);
 }
 
 	public static void main(String[] args) {

@@ -7,25 +7,13 @@
     <groupId>est412.wordstrainer</groupId>
     <artifactId>WordsTrainer</artifactId>
     <!--packaging>jar</packaging-->
-    <version>1.1.0</version>
-
-    <repositories>
-        <repository>
-            <id>repo</id>
-            <url>file://${basedir}/.repo</url>
-        </repository>
-    </repositories>
+    <version>1.2.0</version>
 
     <dependencies>
         <dependency>
-            <groupId>aspose</groupId>
-            <artifactId>aspose-cells</artifactId>
-            <version>8.6.3</version>
-        </dependency>
-        <dependency>
-            <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-jdk16</artifactId>
-            <version>1.46</version>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>3.13</version>
         </dependency>
     </dependencies>
 
@@ -59,31 +47,6 @@
                         <goals>
                             <goal>build-jar</goal>
                         </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-install-plugin</artifactId>
-                <version>2.5.2</version>
-                <executions>
-                    <execution>
-                        <id>aspose-cells</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>install-file</goal>
-                        </goals>
-                        <configuration>
-                            <groupId>aspose</groupId>
-                            <artifactId>aspose-cells</artifactId>
-                            <version>8.6.3</version>
-                            <packaging>jar</packaging>
-                            <file>${basedir}/lib/aspose-cells-8.6.3.jar</file>
-                            <createChecksum>false</createChecksum>
-                            <generatePom>false</generatePom>
-                            <localRepositoryPath>${basedir}/.repo</localRepositoryPath>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>

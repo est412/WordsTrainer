@@ -2,6 +2,7 @@ package est412.wordstrainer;
 
 import java.io.File;
 
+import est412.wordstrainer.model.XLSXPoiDictionary;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.collections.FXCollections;
@@ -20,7 +21,6 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 import est412.wordstrainer.model.Dictionary;
-import est412.wordstrainer.model.XLSXAspDictionary;
 import est412.wordstrainer.model.DictionaryIterator;
 
 public class WordsTrainerController {
@@ -95,7 +95,7 @@ public class WordsTrainerController {
 			if (dict != null) {
 				dict.close();
 			}
-        	dict = new XLSXAspDictionary(file.getAbsolutePath());
+			dict = new XLSXPoiDictionary(file.getAbsolutePath());
         } catch (Exception e) {
         	e.printStackTrace();
         }

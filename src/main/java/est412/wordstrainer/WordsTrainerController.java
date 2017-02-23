@@ -127,6 +127,8 @@ public class WordsTrainerController {
         buttonRestart.disableProperty().setValue(true);
    
         handleRestartButtonAction(null);
+
+		choiceboxMode.getSelectionModel().selectFirst();
   	}
 	
 	@FXML

@@ -143,6 +143,9 @@ public class WordsTrainerController {
 		choiceboxMode.setDisable(false);
 		dictIterator.mode.unbind();
 		dictIterator.mode.bind(choiceboxMode.getSelectionModel().selectedIndexProperty());
+		if (dictIterator.showNumber.get() == 0) {
+			choiceboxMode.getSelectionModel().selectFirst();
+		};
 	}
 		
 	@FXML

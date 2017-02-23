@@ -24,7 +24,7 @@
         <CheckBox fx:id="checkboxRndLang" mnemonicParsing="false" text="Случайно" />
       </children>
     </HBox>
-    <SplitPane dividerPositions="0.4961038961038961" focusTraversable="true" orientation="VERTICAL" prefHeight="207.0" prefWidth="317.0" AnchorPane.bottomAnchor="67.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="45.0">
+    <SplitPane dividerPositions="0.5" focusTraversable="true" orientation="VERTICAL" prefHeight="207.0" prefWidth="317.0" AnchorPane.bottomAnchor="67.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="45.0">
       <items>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
           <children>

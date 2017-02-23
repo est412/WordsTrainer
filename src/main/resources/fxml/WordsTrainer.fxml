@@ -8,7 +8,7 @@
 
 <AnchorPane fx:id="anchorpaneMain" prefHeight="499.0" prefWidth="573.0" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="est412.wordstrainer.WordsTrainerController">
   <children>
-    <ChoiceBox fx:id="choiceboxMode" disable="true" opacity="0.4" prefWidth="146.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="15.0">
+    <ChoiceBox fx:id="choiceboxMode" disable="true" prefWidth="146.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="15.0">
       <items>
         <FXCollections fx:factory="observableArrayList">
           <String fx:value="Item 1" />
@@ -24,7 +24,7 @@
         <CheckBox fx:id="checkboxRndLang" mnemonicParsing="false" text="Случайно" />
       </children>
     </HBox>
-    <SplitPane dividerPositions="0.4961038961038961" focusTraversable="true" orientation="VERTICAL" prefHeight="207.0" prefWidth="317.0" AnchorPane.bottomAnchor="67.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="45.0">
+    <SplitPane dividerPositions="0.5" focusTraversable="true" orientation="VERTICAL" prefHeight="207.0" prefWidth="317.0" AnchorPane.bottomAnchor="67.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="45.0">
       <items>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
           <children>

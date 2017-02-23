@@ -29,14 +29,15 @@ public class XLSXPoiDictionary implements Dictionary {
 	public void open(String fileName) throws Exception {
 		fileInputStream = new FileInputStream(new File(fileName));
 		wb = new XSSFWorkbook(fileInputStream);
-		//TODO добавить проверку наличия 0го воркшита
+		if (wb.getNumberOfSheets() < 1) {
+			wb.createSheet();
+		}
 		ws = wb.getSheetAt(0);
 		wordsNum = ws.getLastRowNum() + 1;
-		ws1 = wb.getSheetAt(1);
-		if (ws1 == null) {
-			// создаём вторую вкладку
-			ws1 = wb.createSheet();
+		if (wb.getNumberOfSheets() < 2) {
+			wb.createSheet();
 		}
+		ws1 = wb.getSheetAt(1);
 	}
 
 	//понятно

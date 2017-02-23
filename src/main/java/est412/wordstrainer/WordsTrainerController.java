@@ -86,8 +86,18 @@ public class WordsTrainerController {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+				settings.setSetting(Settings.WIDTH, ""+mainStage.getWidth());
+				settings.setSetting(Settings.HEIGHT, ""+mainStage.getHeight());
 			}
 		});
+		String width = settings.getSetting(Settings.WIDTH);
+		if (width != null) {
+			mainStage.setWidth(Double.parseDouble(width));
+		}
+		String height = settings.getSetting(Settings.HEIGHT);
+		if (height != null) {
+			mainStage.setHeight(Double.parseDouble(height));
+		}
 	}
 	
 	@FXML

@@ -13,6 +13,8 @@ public final class DefaultSettings {
     {
         defautls.put(Settings.DICTIONARIES_DIRECTORY, ".");
         defautls.put(Settings.LAST_DICTIONARY, "");
+        defautls.put(Settings.WIDTH, null);
+        defautls.put(Settings.HEIGHT, null);
     }
 
     public static String getSetting(String name) {

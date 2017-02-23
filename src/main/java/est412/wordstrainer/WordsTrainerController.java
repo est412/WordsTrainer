@@ -1,8 +1,12 @@
 package est412.wordstrainer;
 
 import java.io.File;
+import java.io.IOException;
 
 import est412.wordstrainer.model.XLSXPoiDictionary;
+import est412.wordstrainer.utils.DefaultSettings;
+import est412.wordstrainer.utils.PropertiesFileSettings;
+import est412.wordstrainer.utils.Settings;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.collections.FXCollections;
@@ -49,11 +53,19 @@ public class WordsTrainerController {
 	private int toShow;
 	private int shown;
 	private Stage mainStage;
+
+	private Settings settings;
 	
 	BooleanBinding isCheckBoxRndEnable;
 	
 	public WordsTrainerController() {
 		dictIterator = new DictionaryIterator();
+		try {
+			settings = PropertiesFileSettings.getInstance();
+		} catch (IOException e) {
+			// TODO выдать предупреждение
+			e.printStackTrace();
+		}
 	}
 	
 	@FXML
@@ -78,19 +90,24 @@ public class WordsTrainerController {
 		});
 	}
 	
-	@FXML protected void handleFileButtonAction(ActionEvent event) {
+	@FXML
+	protected void handleFileButtonAction(ActionEvent event) {
+
 		FileChooser fileChooser = new FileChooser();
-		File initDir = new File(System.getProperty("user.dir"));
-		 
         //Set extension filter
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XLSX files (*.xlsx)", "*.xlsx");
         fileChooser.getExtensionFilters().add(extFilter);
+		File initDir = new File(settings.getSetting(Settings.DICTIONARIES_DIRECTORY));
+		if (!initDir.exists()) {
+			initDir = new File(DefaultSettings.getSetting(Settings.DICTIONARIES_DIRECTORY));
+		}
         fileChooser.setInitialDirectory(initDir);
+		fileChooser.setInitialFileName(settings.getSetting(Settings.LAST_DICTIONARY));
        
         //Show open file dialog
         file = fileChooser.showOpenDialog(mainStage);
         if (file == null) return;
-        
+
         try {
 			if (dict != null) {
 				dict.close();
@@ -99,6 +116,10 @@ public class WordsTrainerController {
         } catch (Exception e) {
         	e.printStackTrace();
         }
+
+		settings.setSetting(Settings.DICTIONARIES_DIRECTORY, file.getParent());
+		settings.setSetting(Settings.LAST_DICTIONARY, file.getName());
+
         labelFile.setText(file.getAbsolutePath());
         
         dictIterator.setDictionary(dict);
@@ -108,7 +129,8 @@ public class WordsTrainerController {
         handleRestartButtonAction(null);
   	}
 	
-	@FXML protected void handleRestartButtonAction(ActionEvent event) {
+	@FXML
+	protected void handleRestartButtonAction(ActionEvent event) {
 		dictIterator.clearCurWord();
 		toShow = 1;
 		shown = 0;
@@ -121,7 +143,8 @@ public class WordsTrainerController {
 		dictIterator.mode.bind(choiceboxMode.getSelectionModel().selectedIndexProperty());
 	}
 		
-	@FXML protected void handleNextButtonAction(ActionEvent event) {
+	@FXML
+	protected void handleNextButtonAction(ActionEvent event) {
 		choiceboxMode.setDisable(true);
 		choiceboxMode.opacityProperty().set(0.9);
 		if (toShow == 1) {
@@ -157,7 +180,8 @@ public class WordsTrainerController {
 		checkboxToRepeat.setDisable(false);
 	}
 	
-	@FXML protected void handleExampleCheckBoxAction(ActionEvent event) {
+	@FXML
+	protected void handleExampleCheckBoxAction(ActionEvent event) {
 		if (!checkboxExample.isSelected()) {
 			dictIterator.hideExamples();
 			return;
@@ -166,13 +190,15 @@ public class WordsTrainerController {
 		if (shown >= 3) dictIterator.showTrExample();
 	}
 	
-	@FXML protected void handleLang0CheckBoxAction(ActionEvent event) {
+	@FXML
+	protected void handleLang0CheckBoxAction(ActionEvent event) {
 		if (!checkboxLang0.isSelected() && !checkboxLang1.isSelected())
 			checkboxLang1.setSelected(true);
 		changeActiveLangs();
 	}
 	
-	@FXML protected void handleLang1CheckBoxAction(ActionEvent event) {
+	@FXML
+	protected void handleLang1CheckBoxAction(ActionEvent event) {
 		if (!checkboxLang0.isSelected() && !checkboxLang1.isSelected()) 
 			checkboxLang0.setSelected(true);
 		changeActiveLangs();

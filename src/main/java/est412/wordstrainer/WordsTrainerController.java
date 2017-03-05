@@ -11,15 +11,16 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
+import javafx.scene.input.ContextMenuEvent;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -90,16 +91,41 @@ public class WordsTrainerController {
 				settings.setSetting(Settings.HEIGHT, ""+mainStage.getHeight());
 			}
 		});
-		String width = settings.getSetting(Settings.WIDTH);
-		if (width != null) {
-			mainStage.setWidth(Double.parseDouble(width));
+		mainStage.setOnShown(new EventHandler<WindowEvent>() {
+			@Override
+			public void handle(WindowEvent event) {
+				String setting = settings.getSetting(Settings.FONT_SIZE_0);
+				if (setting != null) {
+					TextInputControl textInputControl = (TextInputControl) mainStage.getScene().lookup("#lang0");
+					textInputControl.setStyle("-fx-font-size: "+setting);
+				}
+				setting = settings.getSetting(Settings.FONT_SIZE_1);
+				if (setting != null) {
+					TextInputControl textInputControl = (TextInputControl) mainStage.getScene().lookup("#lang1");
+					textInputControl.setStyle("-fx-font-size: "+setting);
+				}
+				setting = settings.getSetting(Settings.FONT_SIZE_EX_0);
+				if (setting != null) {
+					TextInputControl textInputControl = (TextInputControl) mainStage.getScene().lookup("#lang0Example");
+					textInputControl.setStyle("-fx-font-size: "+setting);
+				}
+				setting = settings.getSetting(Settings.FONT_SIZE_EX_1);
+				if (setting != null) {
+					TextInputControl textInputControl = (TextInputControl) mainStage.getScene().lookup("#lang1Example");
+					textInputControl.setStyle("-fx-font-size: "+setting);
+				}
+			}
+		});
+		String setting = settings.getSetting(Settings.WIDTH);
+		if (setting != null) {
+			mainStage.setWidth(Double.parseDouble(setting));
 		}
-		String height = settings.getSetting(Settings.HEIGHT);
-		if (height != null) {
-			mainStage.setHeight(Double.parseDouble(height));
+		setting = settings.getSetting(Settings.HEIGHT);
+		if (setting != null) {
+			mainStage.setHeight(Double.parseDouble(setting));
 		}
 	}
-	
+
 	@FXML
 	protected void handleFileButtonAction(ActionEvent event) {
 
@@ -218,7 +244,25 @@ public class WordsTrainerController {
 			checkboxLang0.setSelected(true);
 		changeActiveLangs();
 	}
-	
+
+	@FXML
+	protected void handleContextMenuRequested(ContextMenuEvent event) {
+		//System.out.println("УРАААА");
+	}
+
+	@FXML
+	protected void handleScroll(ScrollEvent event) {
+		if (!event.isControlDown()) return;
+		TextInputControl textInputControl = (TextInputControl) event.getSource();
+		int size = (int)textInputControl.getFont().getSize();
+		if (event.getTextDeltaY() > 0) {
+			textInputControl.setStyle("-fx-font-size: "+(++size));
+		} else if (event.getTextDeltaY() < 0) {
+			textInputControl.setStyle("-fx-font-size: "+(--size));
+		}
+		settings.setSetting("font_size_"+textInputControl.getId(), ""+size);
+	}
+
 	private void changeActiveLangs() {
 		if (checkboxLang0.isSelected() && checkboxLang1.isSelected()) {
 			dictIterator.setActiveLangs(2);

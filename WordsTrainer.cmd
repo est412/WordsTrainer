@@ -1,3 +1,3 @@
-@echo Starting WordsTrainer-1.3.0
+@echo Starting WordsTrainer-1.4.0
 @echo Please wait...
-@start javaw -jar WordsTrainer-1.3.0.jar
+@start javaw -jar WordsTrainer-1.4.0.jar

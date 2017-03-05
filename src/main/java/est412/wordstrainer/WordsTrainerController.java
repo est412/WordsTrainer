@@ -11,12 +11,11 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.ContextMenuEvent;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -54,6 +53,8 @@ public class WordsTrainerController {
 	private int toShow;
 	private int shown;
 	private Stage mainStage;
+	private TextInputControl contextMenuParentControl;
+	private boolean isControlDown;
 
 	private Settings settings;
 	
@@ -76,6 +77,19 @@ public class WordsTrainerController {
 	}
 	
 	public void initStage(Stage stage) {
+		ContextMenu contextMenu = new ContextMenu();
+		contextMenu.setStyle("-fx-max-height: 300");
+		for(String font : Font.getFamilies()) {
+			contextMenu.getItems().add(new MenuItem(font));
+		}
+		contextMenu.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				MenuItem menuItem = (MenuItem) event.getTarget();
+				contextMenuParentControl.setStyle("-fx-font-family: " + menuItem.getText()+";"+"-fx-font-size: "+ contextMenuParentControl.getFont().getSize());
+				settings.setSetting("font_"+ contextMenuParentControl.getId(), menuItem.getText());
+			}
+		});
 		mainStage = stage;
 		mainStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 			@Override
@@ -94,26 +108,18 @@ public class WordsTrainerController {
 		mainStage.setOnShown(new EventHandler<WindowEvent>() {
 			@Override
 			public void handle(WindowEvent event) {
-				String setting = settings.getSetting(Settings.FONT_SIZE_0);
-				if (setting != null) {
-					TextInputControl textInputControl = (TextInputControl) mainStage.getScene().lookup("#lang0");
-					textInputControl.setStyle("-fx-font-size: "+setting);
-				}
-				setting = settings.getSetting(Settings.FONT_SIZE_1);
-				if (setting != null) {
-					TextInputControl textInputControl = (TextInputControl) mainStage.getScene().lookup("#lang1");
-					textInputControl.setStyle("-fx-font-size: "+setting);
-				}
-				setting = settings.getSetting(Settings.FONT_SIZE_EX_0);
-				if (setting != null) {
-					TextInputControl textInputControl = (TextInputControl) mainStage.getScene().lookup("#lang0Example");
-					textInputControl.setStyle("-fx-font-size: "+setting);
-				}
-				setting = settings.getSetting(Settings.FONT_SIZE_EX_1);
-				if (setting != null) {
-					TextInputControl textInputControl = (TextInputControl) mainStage.getScene().lookup("#lang1Example");
-					textInputControl.setStyle("-fx-font-size: "+setting);
-				}
+				TextInputControl textInputControl = (TextInputControl) mainStage.getScene().lookup("#lang0");
+				textInputControl.setContextMenu(contextMenu);
+				setFontStyle(textInputControl);
+				textInputControl = (TextInputControl) mainStage.getScene().lookup("#lang1");
+				textInputControl.setContextMenu(contextMenu);
+				setFontStyle(textInputControl);
+				textInputControl = (TextInputControl) mainStage.getScene().lookup("#lang0Example");
+				textInputControl.setContextMenu(contextMenu);
+				setFontStyle(textInputControl);
+				textInputControl = (TextInputControl) mainStage.getScene().lookup("#lang1Example");
+				textInputControl.setContextMenu(contextMenu);
+				setFontStyle(textInputControl);
 			}
 		});
 		String setting = settings.getSetting(Settings.WIDTH);
@@ -124,6 +130,26 @@ public class WordsTrainerController {
 		if (setting != null) {
 			mainStage.setHeight(Double.parseDouble(setting));
 		}
+	}
+
+	private void setFontStyle(TextInputControl textInputControl) {
+		String size = settings.getSetting("font_size_"+textInputControl.getId());
+		String family = settings.getSetting("font_"+textInputControl.getId());
+		String style = null;
+		if (size != null) {
+			style = "-fx-font-size: "+size+";";
+		}
+		if (family != null) {
+			style += "-fx-font-family: "+family;
+		}
+		if (style != null) {
+			textInputControl.setStyle(style);
+		}
+	}
+
+	@FXML
+	protected void handleContextMenu(ContextMenuEvent event) {
+		contextMenuParentControl = (TextInputControl) event.getSource();
 	}
 
 	@FXML
@@ -243,11 +269,6 @@ public class WordsTrainerController {
 		if (!checkboxLang0.isSelected() && !checkboxLang1.isSelected()) 
 			checkboxLang0.setSelected(true);
 		changeActiveLangs();
-	}
-
-	@FXML
-	protected void handleContextMenuRequested(ContextMenuEvent event) {
-		//System.out.println("УРАААА");
 	}
 
 	@FXML

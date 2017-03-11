@@ -14,9 +14,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.input.ContextMenuEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
@@ -41,6 +39,7 @@ public class WordsTrainerController {
 	@FXML private Label labelIdxWordsNumber;
 	@FXML private Button buttonNext;
 	@FXML private Button buttonRestart;
+	@FXML private Button fileButton;
 	@FXML private HBox hboxLang;
 	@FXML private TextArea textareaLang0Example;
 	@FXML private TextArea textareaLang1Example;
@@ -120,6 +119,7 @@ public class WordsTrainerController {
 				textInputControl = (TextInputControl) mainStage.getScene().lookup("#lang1Example");
 				textInputControl.setContextMenu(contextMenu);
 				setFontStyle(textInputControl);
+				fileButton.requestFocus();
 			}
 		});
 		String setting = settings.getSetting(Settings.WIDTH);
@@ -191,6 +191,8 @@ public class WordsTrainerController {
         handleRestartButtonAction(null);
 
 		choiceboxMode.getSelectionModel().selectFirst();
+		buttonNext.requestFocus();
+
   	}
 	
 	@FXML
@@ -282,6 +284,23 @@ public class WordsTrainerController {
 			textInputControl.setStyle("-fx-font-size: "+(--size));
 		}
 		settings.setSetting("font_size_"+textInputControl.getId(), ""+size);
+	}
+
+	@FXML
+	protected void handleKeyPressed(KeyEvent event) {
+		if (!buttonNext.isDisabled()) {
+			if ("SPACE".equals(event.getCode().toString()) || "ENTER".equals(event.getCode().toString())) {
+				if (!buttonNext.isFocused()) {
+					buttonNext.requestFocus();
+					buttonNext.fire();
+				}
+			}
+		}
+		if (!checkboxToRepeat.isDisabled()) {
+			if ("CONTROL".equals(event.getCode().toString())) {
+				checkboxToRepeat.selectedProperty().set(!checkboxToRepeat.selectedProperty().get());
+			}
+		}
 	}
 
 	private void changeActiveLangs() {
